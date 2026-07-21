@@ -30,7 +30,6 @@
         .screen{position:relative;z-index:10;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1rem;transition:opacity .5s,transform .5s}
         .screen.hidden{opacity:0;pointer-events:none;position:absolute;top:0;left:0;right:0;transform:scale(.96)}
 
-        /* Input nama */
         .name-card{background:linear-gradient(160deg,var(--surface-light),var(--surface));border:1px solid rgba(255,255,255,.07);border-radius:24px;padding:2.5rem 2rem;max-width:420px;width:100%;text-align:center;position:relative;overflow:hidden}
         .name-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--terracotta),var(--gold),var(--gold-light))}
         .name-card h1{font-family:'Fredoka';font-size:clamp(1.8rem,5vw,2.4rem);font-weight:700;background:linear-gradient(135deg,var(--gold),var(--terracotta),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.3rem}
@@ -51,7 +50,6 @@
         .btn-next:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 6px 28px rgba(74,196,122,.45)}
         .btn-next:active{transform:translateY(0) scale(.98)}
 
-        /* Game */
         .player-bar{display:flex;align-items:center;gap:.6rem;margin-bottom:.8rem;padding:.45rem 1rem;border-radius:12px;background:var(--surface);border:1px solid rgba(255,255,255,.06);font-size:.85rem}
         .player-bar .pname{font-weight:700;color:var(--gold)}
         .game-hdr{text-align:center;margin-bottom:.8rem}
@@ -63,6 +61,22 @@
         .table::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent)}
         .bowls-row{display:flex;justify-content:center;align-items:flex-end;gap:clamp(.6rem,2.5vw,1.8rem);flex-wrap:wrap}
 
+        /* Animasi pengacakan mangkok */
+        .bowl-slot.shuffling .bowl-assembly {
+            animation: shuffleMove .35s ease-in-out;
+        }
+        .bowl-slot.shuffling:nth-child(1) .bowl-assembly { animation-delay: 0s; }
+        .bowl-slot.shuffling:nth-child(2) .bowl-assembly { animation-delay: .06s; }
+        .bowl-slot.shuffling:nth-child(3) .bowl-assembly { animation-delay: .12s; }
+        .bowl-slot.shuffling:nth-child(4) .bowl-assembly { animation-delay: .18s; }
+        @keyframes shuffleMove {
+            0%  { transform: translateX(0); }
+            25% { transform: translateX(-12px) rotate(-4deg); }
+            50% { transform: translateX(10px) rotate(3deg); }
+            75% { transform: translateX(-6px) rotate(-2deg); }
+            100%{ transform: translateX(0) rotate(0deg); }
+        }
+
         .bowl-slot{position:relative;display:flex;flex-direction:column;align-items:center;width:clamp(115px,19vw,155px);height:195px;perspective:600px;opacity:0;transform:translateY(40px);animation:bI .6s ease forwards}
         .bowl-slot:nth-child(1){animation-delay:.12s}.bowl-slot:nth-child(2){animation-delay:.24s}.bowl-slot:nth-child(3){animation-delay:.36s}.bowl-slot:nth-child(4){animation-delay:.48s}
         @keyframes bI{to{opacity:1;transform:translateY(0)}}
@@ -71,7 +85,7 @@
         .bowl-content-area{position:absolute;bottom:48px;width:75px;height:60px;display:flex;align-items:center;justify-content:center;z-index:2;opacity:0;transition:opacity .3s ease .2s}
         .bowl-slot.revealed .bowl-content-area{opacity:1}
         .bowl-assembly{position:absolute;bottom:44px;width:125px;height:90px;z-index:10;cursor:pointer;transition:transform .7s cubic-bezier(.34,1.56,.64,1);transform-origin:center bottom}
-        .bowl-slot:not(.revealed):not(.done) .bowl-assembly:hover{animation:wob .6s ease}
+        .bowl-slot:not(.revealed):not(.done):not(.shuffling) .bowl-assembly:hover{animation:wob .6s ease}
         @keyframes wob{0%,100%{transform:rotate(0)}20%{transform:rotate(-3deg)}40%{transform:rotate(3deg)}60%{transform:rotate(-2deg)}80%{transform:rotate(2deg)}}
         .bowl-slot.lifted .bowl-assembly{transform:translateY(-100px) rotateX(-12deg)}
         .bowl-assembly.locked{cursor:default}
@@ -93,12 +107,10 @@
         .hint-text{text-align:center;margin-top:1rem;font-size:.85rem;color:var(--text-muted);animation:hP 2s ease-in-out infinite}
         @keyframes hP{0%,100%{opacity:.55}50%{opacity:1}}
 
-        /* Briefing */
         .result-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,8,6,.88);backdrop-filter:blur(10px);z-index:100;display:flex;align-items:center;justify-content:center;padding:1.2rem;opacity:0;pointer-events:none;transition:opacity .4s;overflow-y:auto}
         .result-overlay.active{opacity:1;pointer-events:auto}
         .result-card{background:linear-gradient(160deg,var(--surface-light),var(--surface));border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:2rem;max-width:520px;width:100%;position:relative;transform:translateY(30px) scale(.95);transition:transform .5s cubic-bezier(.34,1.56,.64,1)}
         .result-overlay.active .result-card{transform:translateY(0) scale(1)}
-
         .r-player{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .8rem;border-radius:8px;background:rgba(0,0,0,.3);font-size:.8rem;color:var(--text-muted);margin-bottom:.8rem}
         .r-player strong{color:var(--gold)}
         .r-badge{display:inline-flex;align-items:center;gap:.45rem;padding:.35rem .9rem;border-radius:10px;font-family:'Fredoka';font-size:.8rem;font-weight:600;margin-bottom:.8rem}
@@ -115,7 +127,6 @@
         .btn-outline{font-family:'Fredoka';font-size:.9rem;font-weight:600;padding:.65rem 1.5rem;border:2px solid rgba(255,255,255,.1);border-radius:12px;background:transparent;color:var(--text);cursor:pointer;transition:all .2s}
         .btn-outline:hover{border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.04)}
         .btn-row{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap;margin-top:1.2rem}
-
         .confetti-piece{position:fixed;z-index:200;pointer-events:none;opacity:0}
         .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface-light);border:1px solid rgba(255,255,255,.08);color:var(--text);padding:.65rem 1.4rem;border-radius:12px;font-size:.85rem;font-weight:600;z-index:150;opacity:0;transition:all .4s;pointer-events:none;box-shadow:0 8px 30px rgba(0,0,0,.4)}
         .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -267,6 +278,7 @@
         const dotPat={1:[0,0,0,0,1,0,0,0,0],2:[0,0,1,0,0,0,1,0,0],3:[0,0,1,0,1,0,1,0,0],4:[1,0,1,0,0,0,1,0,1],5:[1,0,1,0,1,0,1,0,1],6:[1,0,1,1,0,1,1,0,1]};
 
         let playerName = '';
+        let lastDiceIdx = -1; // menyimpan posisi dadu sebelumnya
         let S = { diceIdx:-1, attempts:0, busy:false, found:false };
 
         /* ===== Init ===== */
@@ -291,6 +303,22 @@
                 h+=`<div class="bg-p" style="width:${sz}px;height:${sz}px;left:${x}%;top:${y}%;background:${col};--d:${dur}s;--dl:${del}s"></div>`;
             }
             c.innerHTML=h;
+        }
+
+        /* ===== Acak posisi dadu, dijamin beda dari sebelumnya ===== */
+        function rollDice() {
+            let newIdx;
+            if (lastDiceIdx === -1) {
+                // Putaran pertama, bebas
+                newIdx = Math.floor(Math.random() * 4);
+            } else {
+                // Pastikan beda dari posisi sebelumnya
+                do {
+                    newIdx = Math.floor(Math.random() * 4);
+                } while (newIdx === lastDiceIdx);
+            }
+            lastDiceIdx = newIdx;
+            return newIdx;
         }
 
         /* ===== Submit Nama ===== */
@@ -320,13 +348,24 @@
 
         /* ===== Mulai Game ===== */
         function startGame() {
-            S.diceIdx = Math.floor(Math.random()*4);
+            // Acak dadu di posisi baru (dijamin beda dari sebelumnya)
+            S.diceIdx = rollDice();
             S.attempts = 0; S.busy = false; S.found = false;
             document.getElementById('attempt-count').textContent = '0';
             document.getElementById('display-name').textContent = playerName;
-            document.getElementById('hint-text').innerHTML = '<i class="fa-solid fa-arrow-pointer" style="margin-right:.3rem"></i> Klik mangkok untuk mengangkatnya';
+            document.getElementById('hint-text').innerHTML = '<i class="fa-solid fa-shuffle" style="margin-right:.3rem;color:var(--gold)"></i> Mangkok sedang diacak...';
             renderBowls();
             switchTo('game-screen');
+
+            // Animasi pengacakan mangkok
+            const slots = document.querySelectorAll('.bowl-slot');
+            slots.forEach(s => s.classList.add('shuffling'));
+
+            // Setelah animasi acak selesai, baru izinkan klik
+            setTimeout(() => {
+                slots.forEach(s => s.classList.remove('shuffling'));
+                document.getElementById('hint-text').innerHTML = '<i class="fa-solid fa-arrow-pointer" style="margin-right:.3rem"></i> Klik mangkok untuk mengangkatnya';
+            }, 1200);
         }
 
         function renderBowls() {
@@ -362,34 +401,44 @@
 
         /* ===== Klik Mangkok ===== */
         function clickBowl(i) {
-            if(S.busy||S.found) return;
-            const slot=document.getElementById(`bs${i}`);
-            if(slot.classList.contains('revealed')||slot.classList.contains('done')) return;
-            S.busy=true; S.attempts++;
-            document.getElementById('attempt-count').textContent=S.attempts;
-            slot.classList.add('lifted','revealed');
+            // Blokir klik selama animasi acak masih berjalan
+            if(S.busy || S.found) return;
+            const slot = document.getElementById(`bs${i}`);
+            if(slot.classList.contains('shuffling')) return;
+            if(slot.classList.contains('revealed') || slot.classList.contains('done')) return;
 
-            if(i===S.diceIdx) {
-                S.found=true;
-                document.getElementById('hint-text').innerHTML='<i class="fa-solid fa-star" style="color:var(--gold);margin-right:.3rem"></i> Dadu ditemukan!';
+            S.busy = true; S.attempts++;
+            document.getElementById('attempt-count').textContent = S.attempts;
+            slot.classList.add('lifted', 'revealed');
+
+            if(i === S.diceIdx) {
+                S.found = true;
+                document.getElementById('hint-text').innerHTML = '<i class="fa-solid fa-star" style="color:var(--gold);margin-right:.3rem"></i> Dadu ditemukan!';
                 document.getElementById(`ba${i}`).classList.add('locked');
-                setTimeout(()=>{ confetti(); setTimeout(()=>{ showBriefing(pillars[i]); S.busy=false; },700); },550);
+                setTimeout(() => {
+                    confetti();
+                    setTimeout(() => { showBriefing(pillars[i]); S.busy = false; }, 700);
+                }, 550);
             } else {
-                toast('Tidak ada dadu di sini. Coba mangkok lain!','#e8694a');
+                toast('Tidak ada dadu di sini. Coba mangkok lain!', '#e8694a');
                 document.getElementById(`ba${i}`).classList.add('locked');
-                setTimeout(()=>{ slot.classList.remove('lifted'); slot.classList.add('done'); setTimeout(()=>{ slot.classList.remove('revealed'); S.busy=false; },650); },1400);
+                setTimeout(() => {
+                    slot.classList.remove('lifted');
+                    slot.classList.add('done');
+                    setTimeout(() => { slot.classList.remove('revealed'); S.busy = false; }, 650);
+                }, 1400);
             }
         }
 
         /* ===== Briefing ===== */
         function showBriefing(p) {
-            document.getElementById('r-player').innerHTML=`<i class="fa-solid fa-user" style="font-size:.75rem"></i> <strong>${playerName}</strong> mendapat materi:`;
-            document.getElementById('r-badge').innerHTML=`<i class="fa-solid ${p.icon}"></i> Pilar Berpikir Komputasional`;
-            document.getElementById('r-badge').style.cssText=`background:${p.color}15;color:${p.color};border:1px solid ${p.color}30`;
-            document.getElementById('r-title').textContent=p.name;
-            document.getElementById('r-title').style.color=p.color;
-            document.getElementById('r-desc').textContent=p.description;
-            document.getElementById('slides-outline').innerHTML=p.slides.map((s,i)=>`
+            document.getElementById('r-player').innerHTML = `<i class="fa-solid fa-user" style="font-size:.75rem"></i> <strong>${playerName}</strong> mendapat materi:`;
+            document.getElementById('r-badge').innerHTML = `<i class="fa-solid ${p.icon}"></i> Pilar Berpikir Komputasional`;
+            document.getElementById('r-badge').style.cssText = `background:${p.color}15;color:${p.color};border:1px solid ${p.color}30`;
+            document.getElementById('r-title').textContent = p.name;
+            document.getElementById('r-title').style.color = p.color;
+            document.getElementById('r-desc').textContent = p.description;
+            document.getElementById('slides-outline').innerHTML = p.slides.map((s,i) => `
                 <div class="slide-item">
                     <div class="slide-num" style="background:${p.color}">${i+1}</div>
                     <div class="slide-info">
@@ -398,16 +447,15 @@
                     </div>
                 </div>
             `).join('');
-            document.getElementById('result-card').style.borderTop=`3px solid ${p.color}`;
+            document.getElementById('result-card').style.borderTop = `3px solid ${p.color}`;
             document.getElementById('result-overlay').classList.add('active');
         }
 
-        function hideBriefing(){ document.getElementById('result-overlay').classList.remove('active'); }
+        function hideBriefing() { document.getElementById('result-overlay').classList.remove('active'); }
 
         /* ===== Siswa Berikutnya ===== */
         function nextStudent() {
             hideBriefing();
-            /* Reset input nama dan kembali ke layar nama */
             const inp = document.getElementById('name-input');
             inp.value = '';
             document.getElementById('name-error').textContent = '';
@@ -419,37 +467,37 @@
             }, 350);
         }
 
-        function backToName(){ hideBriefing(); setTimeout(()=>switchTo('name-screen'),350); }
+        function backToName() { hideBriefing(); setTimeout(() => switchTo('name-screen'), 350); }
 
-        function switchTo(id){
-            document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
-            setTimeout(()=>document.getElementById(id).classList.remove('hidden'),80);
+        function switchTo(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+            setTimeout(() => document.getElementById(id).classList.remove('hidden'), 80);
         }
 
         /* ===== Toast ===== */
-        function toast(msg,col){
-            const t=document.getElementById('toast');
-            t.textContent=msg; t.style.borderLeft=`3px solid ${col||'var(--gold)'}`;
-            t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2200);
+        function toast(msg, col) {
+            const t = document.getElementById('toast');
+            t.textContent = msg; t.style.borderLeft = `3px solid ${col||'var(--gold)'}`;
+            t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2200);
         }
 
         /* ===== Confetti ===== */
-        function confetti(){
-            const cols=['#e8a838','#e8694a','#4a9ee8','#4ac47a','#e8c84a','#f5efe6','#00c4cc'];
+        function confetti() {
+            const cols = ['#e8a838','#e8694a','#4a9ee8','#4ac47a','#e8c84a','#f5efe6','#00c4cc'];
             for(let i=0;i<55;i++){
-                const el=document.createElement('div'); el.className='confetti-piece';
-                const sz=Math.random()*8+5,x=Math.random()*100;
-                const c=cols[Math.floor(Math.random()*cols.length)];
-                const dur=Math.random()*2.2+1.8,del=Math.random()*.5;
-                const rot=Math.random()*1080-540,drift=(Math.random()-.5)*220;
-                const br=Math.random()>.5?'50%':'2px';
-                el.style.cssText=`left:${x}%;width:${sz}px;height:${sz*.7}px;background:${c};border-radius:${br}`;
+                const el = document.createElement('div'); el.className = 'confetti-piece';
+                const sz = Math.random()*8+5, x = Math.random()*100;
+                const c = cols[Math.floor(Math.random()*cols.length)];
+                const dur = Math.random()*2.2+1.8, del = Math.random()*.5;
+                const rot = Math.random()*1080-540, drift = (Math.random()-.5)*220;
+                const br = Math.random()>.5 ? '50%' : '2px';
+                el.style.cssText = `left:${x}%;width:${sz}px;height:${sz*.7}px;background:${c};border-radius:${br}`;
                 el.animate([
                     {transform:'translateX(0) translateY(-15px) rotate(0deg) scale(1)',opacity:1},
                     {transform:`translateX(${drift}px) translateY(100vh) rotate(${rot}deg) scale(.4)`,opacity:0}
                 ],{duration:dur*1000,delay:del*1000,easing:'cubic-bezier(.25,.46,.45,.94)',fill:'forwards'});
                 document.body.appendChild(el);
-                setTimeout(()=>el.remove(),(dur+del)*1000+50);
+                setTimeout(() => el.remove(), (dur+del)*1000+50);
             }
         }
 
