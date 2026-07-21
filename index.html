@@ -2,8 +2,8 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mangkok Misteri - Pilih Materi Presentasimu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pilar Misteri - Pilih Materi Presentasimu</title>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -18,357 +18,343 @@
             --text:#f5efe6;--text-muted:#a89b8c;--terracotta:#c4784a;--gold:#e8a838;--gold-light:#f0c060;
         }
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+        
+        /* Memusatkan container dan memberi background luar */
+        body {
+            font-family:'Nunito',sans-serif;
+            background: #050403; /* Warna sangat gelap untuk background luar (desktop) */
+            color:var(--text);
+            min-height:100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
 
-        .bg-glow{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0}
-        .bg-glow-1{width:500px;height:500px;background:rgba(196,120,74,0.07);top:-150px;left:-100px;animation:gD 14s ease-in-out infinite alternate}
-        .bg-glow-2{width:400px;height:400px;background:rgba(232,168,56,0.05);bottom:-100px;right:-80px;animation:gD 18s ease-in-out infinite alternate-reverse}
-        @keyframes gD{0%{transform:translate(0,0) scale(1)}100%{transform:translate(50px,35px) scale(1.2)}}
-        .bg-p{position:fixed;border-radius:50%;pointer-events:none;z-index:0;opacity:0;animation:pF var(--d) ease-in-out infinite;animation-delay:var(--dl)}
-        @keyframes pF{0%,100%{transform:translateY(0) translateX(0);opacity:.12}50%{transform:translateY(-30px) translateX(15px);opacity:.32}}
+        /* Container App (Simulasi layar Tablet Landscape) */
+        #app-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px; /* Lebar maksimal tablet landscape */
+            height: 100vh;
+            max-height: 650px; /* Rasio mendekati 3:2 (900x650) */
+            background: var(--bg);
+            overflow: hidden; /* Menahan semua elemen absolut agar tidak keluar box */
+            box-shadow: 0 0 50px rgba(0,0,0,0.8), 0 0 0 8px #1a1815;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+        }
 
-        .screen{position:relative;z-index:10;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1rem;transition:opacity .5s,transform .5s}
-        .screen.hidden{opacity:0;pointer-events:none;position:absolute;top:0;left:0;right:0;transform:scale(.96)}
+        @media (max-width: 768px) {
+            #app-container {
+                max-width: 100%;
+                max-height: none;
+                border-radius: 0;
+                box-shadow: none;
+                border: none;
+            }
+        }
 
-        .name-card{background:linear-gradient(160deg,var(--surface-light),var(--surface));border:1px solid rgba(255,255,255,.07);border-radius:24px;padding:2.5rem 2rem;max-width:420px;width:100%;text-align:center;position:relative;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,.4)}
+        .fullscreen-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+        .fullscreen-btn:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .bg-glow{position:absolute;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0}
+        .bg-glow-1{width:400px;height:400px;background:rgba(196,120,74,0.08);top:-100px;left:-100px;animation:gD 14s ease-in-out infinite alternate}
+        .bg-glow-2{width:350px;height:350px;background:rgba(232,168,56,0.06);bottom:-50px;right:-50px;animation:gD 18s ease-in-out infinite alternate-reverse}
+        @keyframes gD{0%{transform:translate(0,0) scale(1)}100%{transform:translate(40px,30px) scale(1.1)}}
+        
+        .bg-p{position:absolute;border-radius:50%;pointer-events:none;z-index:0;opacity:0;animation:pF var(--d) ease-in-out infinite;animation-delay:var(--dl)}
+        @keyframes pF{0%,100%{transform:translateY(0) translateX(0);opacity:.1}50%{transform:translateY(-20px) translateX(10px);opacity:.25}}
+        #bg-particles { position: absolute; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; }
+
+        .screen{position:absolute;top:0;left:0;width:100%;height:100%;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;transition:opacity .4s,transform .4s;overflow-y:auto; overflow-x:hidden;}
+        .screen.hidden{opacity:0;pointer-events:none;transform:scale(.96)}
+
+        .name-card{background:linear-gradient(160deg,var(--surface-light),var(--surface));border:1px solid rgba(255,255,255,.07);border-radius:24px;padding:2rem 1.5rem;width:100%;max-width:360px;text-align:center;position:relative;overflow:hidden;box-shadow:0 15px 35px rgba(0,0,0,.4)}
         .name-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--terracotta),var(--gold),var(--gold-light))}
-        .name-card h1{font-family:'Fredoka';font-size:clamp(1.8rem,5vw,2.4rem);font-weight:700;background:linear-gradient(135deg,var(--gold),var(--terracotta),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.3rem}
-        .name-card .sub{color:var(--text-muted);font-size:.9rem;margin-bottom:1.8rem}
+        .name-card h1{font-family:'Fredoka';font-size:clamp(1.6rem,7vw,2.2rem);font-weight:700;background:linear-gradient(135deg,var(--gold),var(--terracotta),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.3rem;line-height:1.2}
+        .name-card .sub{color:var(--text-muted);font-size:.85rem;margin-bottom:1.5rem;line-height:1.4}
         
         .name-input-wrap{position:relative;margin-bottom:.5rem}
         .name-input-wrap i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:.9rem}
-        .name-input{width:100%;padding:.85rem 1rem .85rem 2.6rem;border-radius:14px;border:2px solid rgba(255,255,255,.08);background:rgba(0,0,0,.25);color:var(--text);font-family:'Nunito';font-size:1rem;font-weight:600;outline:none;transition:border-color .3s,box-shadow .3s}
-        .name-input::placeholder{color:var(--text-muted);font-weight:400}
+        .name-input{width:100%;padding:.8rem 1rem .8rem 2.4rem;border-radius:12px;border:2px solid rgba(255,255,255,.08);background:rgba(0,0,0,.25);color:var(--text);font-family:'Nunito';font-size:.95rem;font-weight:600;outline:none;transition:border-color .3s,box-shadow .3s}
         .name-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(232,168,56,.15)}
-        .name-error{font-size:.8rem;color:#e8694a;min-height:1.4rem;margin-bottom:.3rem;transition:opacity .3s}
+        .name-error{font-size:.75rem;color:#e8694a;min-height:1.2rem;margin-bottom:.3rem}
 
-        .btn-gold{font-family:'Fredoka';font-size:1.05rem;font-weight:600;padding:.8rem 2.2rem;border:none;border-radius:14px;background:linear-gradient(135deg,var(--gold),#d49520);color:#1a1714;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 20px rgba(232,168,56,.3);width:100%}
-        .btn-gold:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(232,168,56,.45)}
+        .btn-gold{font-family:'Fredoka';font-size:1rem;font-weight:600;padding:.8rem 2rem;border:none;border-radius:12px;background:linear-gradient(135deg,var(--gold),#d49520);color:#1a1714;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 15px rgba(232,168,56,.3);width:100%}
+        .btn-gold:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(232,168,56,.4)}
         .btn-gold:active{transform:translateY(0) scale(.98)}
-        .btn-gold:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
 
-        .player-bar{display:flex;align-items:center;gap:.6rem;margin-bottom:.8rem;padding:.45rem 1rem;border-radius:12px;background:var(--surface);border:1px solid rgba(255,255,255,.06);font-size:.85rem;box-shadow:0 4px 15px rgba(0,0,0,.2)}
-        .player-bar .pname{font-weight:700;color:var(--gold)}
-        .game-hdr{text-align:center;margin-bottom:1rem}
-        .game-hdr h2{font-family:'Fredoka';font-size:clamp(1.2rem,3.5vw,1.6rem);font-weight:600}
+        .player-bar{display:flex;align-items:center;gap:.5rem;margin-bottom:1rem;padding:.5rem .8rem;border-radius:10px;background:var(--surface);border:1px solid rgba(255,255,255,.06);font-size:.8rem;width:95%;max-width:450px}
+        .player-bar .pname{font-weight:700;color:var(--gold);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
         
-        .topic-badge{display:inline-flex;align-items:center;gap:.35rem;margin-top:.4rem;padding:.3rem .9rem;border-radius:16px;background:linear-gradient(135deg, rgba(232,168,56,0.1), rgba(196,120,74,0.1));border:1px solid rgba(232,168,56,0.2);font-size:.8rem;color:var(--text);font-weight:600}
+        .game-hdr{text-align:center;margin-bottom:1.5rem;width:100%}
+        .game-hdr h2{font-family:'Fredoka';font-size:clamp(1.4rem,5vw,1.8rem);font-weight:600;line-height:1.2;margin-bottom:.5rem}
+        
+        .topic-badge{display:inline-flex;align-items:center;gap:.3rem;padding:.3rem 1rem;border-radius:12px;background:linear-gradient(135deg, rgba(232,168,56,0.1), rgba(196,120,74,0.1));border:1px solid rgba(232,168,56,0.2);font-size:.85rem;color:var(--text);font-weight:600}
         .topic-badge span{color:var(--gold);font-weight:800;font-size:.9rem}
 
-        .table{background:linear-gradient(180deg,#3e3222 0%,#4a3c28 30%,#3a2e1e 65%,#4a3c28 100%);border-radius:22px;padding:2.2rem 1.5rem 1.8rem;border:2px solid #2a2015;box-shadow:0 12px 50px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.04);position:relative}
+        .table{background:linear-gradient(180deg,#3e3222 0%,#4a3c28 30%,#3a2e1e 65%,#4a3c28 100%);border-radius:24px;padding:2rem 1.5rem;border:2px solid #2a2015;box-shadow:0 10px 30px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.04);position:relative;width:90%;max-width:750px}
         .table::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent)}
-        .bowls-row{display:flex;justify-content:center;align-items:flex-end;gap:clamp(.6rem,2.5vw,1.8rem);flex-wrap:wrap}
-
-        .bowl-slot.shuffling .bowl-assembly { animation: shuffleMove .35s ease-in-out; }
-        .bowl-slot.shuffling:nth-child(1) .bowl-assembly { animation-delay: 0s; }
-        .bowl-slot.shuffling:nth-child(2) .bowl-assembly { animation-delay: .06s; }
-        .bowl-slot.shuffling:nth-child(3) .bowl-assembly { animation-delay: .12s; }
-        .bowl-slot.shuffling:nth-child(4) .bowl-assembly { animation-delay: .18s; }
-        @keyframes shuffleMove {
-            0%  { transform: translateX(0); }
-            25% { transform: translateX(-12px) rotate(-4deg); }
-            50% { transform: translateX(10px) rotate(3deg); }
-            75% { transform: translateX(-6px) rotate(-2deg); }
-            100%{ transform: translateX(0) rotate(0deg); }
+        
+        /* Grid untuk rasio Tablet (1 baris x 4 kolom) */
+        .bowls-row{display:grid;grid-template-columns:repeat(4, 1fr);gap:1.5rem 1rem;justify-items:center}
+        
+        @media (max-width: 768px) {
+            .bowls-row { grid-template-columns: repeat(2, 1fr); }
         }
 
-        .bowl-slot{position:relative;display:flex;flex-direction:column;align-items:center;width:clamp(115px,19vw,155px);height:195px;perspective:600px;opacity:0;transform:translateY(40px);animation:bI .6s ease forwards;transition:opacity 0.4s ease, filter 0.4s ease, transform 0.4s ease;}
-        .bowl-slot:nth-child(1){animation-delay:.12s}.bowl-slot:nth-child(2){animation-delay:.24s}.bowl-slot:nth-child(3){animation-delay:.36s}.bowl-slot:nth-child(4){animation-delay:.48s}
+        .bowl-slot{position:relative;display:flex;flex-direction:column;align-items:center;width:120px;height:170px;perspective:500px;opacity:0;transform:translateY(30px);animation:bI .5s ease forwards;transition:opacity 0.4s ease, filter 0.4s ease, transform 0.4s ease;}
+        .bowl-slot:nth-child(1){animation-delay:.1s}.bowl-slot:nth-child(2){animation-delay:.2s}.bowl-slot:nth-child(3){animation-delay:.3s}.bowl-slot:nth-child(4){animation-delay:.4s}
         @keyframes bI{to{opacity:1;transform:translateY(0)}}
         
-        .bowl-slot.dimmed { opacity: 0.35; filter: grayscale(80%) blur(1px); pointer-events: none; transform: scale(0.95) translateY(0); }
+        /* Redup saat mangkok lain dipilih */
+        .bowl-slot.dimmed { opacity: 0.3; filter: grayscale(80%) blur(1px); pointer-events: none; transform: scale(0.95); }
 
-        .bowl-slot::after{content:'';position:absolute;bottom:42px;width:95px;height:13px;background:radial-gradient(ellipse,rgba(0,0,0,.4) 0%,transparent 70%);border-radius:50%;z-index:1;transition:all .7s cubic-bezier(.34,1.56,.64,1)}
-        .bowl-slot.lifted::after{transform:scale(1.7);opacity:.12}
+        .bowl-slot::after{content:'';position:absolute;bottom:35px;width:80px;height:10px;background:radial-gradient(ellipse,rgba(0,0,0,.4) 0%,transparent 70%);border-radius:50%;z-index:1;transition:all .6s cubic-bezier(.34,1.56,.64,1)}
+        .bowl-slot.lifted::after{transform:scale(1.5);opacity:.1}
         
-        .bowl-content-area{position:absolute;bottom:48px;width:75px;height:60px;display:flex;align-items:center;justify-content:center;z-index:2;opacity:0;transition:opacity .4s ease .2s}
+        .bowl-content-area{position:absolute;bottom:40px;width:60px;height:50px;display:flex;align-items:center;justify-content:center;z-index:2;opacity:0;transition:opacity .3s ease .2s}
         .bowl-slot.revealed .bowl-content-area{opacity:1}
         
-        .bowl-assembly{position:absolute;bottom:44px;width:125px;height:90px;z-index:10;cursor:pointer;transition:transform .7s cubic-bezier(.34,1.56,.64,1);transform-origin:center bottom}
-        .bowl-slot:not(.revealed):not(.dimmed):not(.shuffling) .bowl-assembly:hover{animation:wob .6s ease}
-        @keyframes wob{0%,100%{transform:rotate(0)}20%{transform:rotate(-3deg)}40%{transform:rotate(3deg)}60%{transform:rotate(-2deg)}80%{transform:rotate(2deg)}}
-        .bowl-slot.lifted .bowl-assembly{transform:translateY(-100px) rotateX(-12deg)}
-        .bowl-assembly.locked{cursor:default}
+        .bowl-assembly{position:absolute;bottom:36px;width:105px;height:75px;z-index:10;cursor:pointer;transition:transform .6s cubic-bezier(.34,1.56,.64,1);transform-origin:center bottom}
+        .bowl-slot:not(.revealed):not(.dimmed):not(.shuffling) .bowl-assembly:hover{animation:wob .5s ease}
+        @keyframes wob{0%,100%{transform:rotate(0)}25%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}75%{transform:rotate(-3deg)}}
         
-        .bowl-body{width:100%;height:100%;border-radius:63px 63px 7px 7px;background:linear-gradient(155deg,#d4885c 0%,#c07040 25%,#a05830 50%,#8b4518 80%,#6b3410 100%);position:relative;box-shadow:inset 0 -12px 25px rgba(0,0,0,.35),inset 0 8px 15px rgba(255,220,180,.1),0 6px 15px rgba(0,0,0,.4)}
+        .bowl-slot.lifted .bowl-assembly{transform:translateY(-85px) rotateX(-12deg)}
+        .bowl-assembly.locked{cursor:default;pointer-events:none;}
+        
+        .bowl-body{width:100%;height:100%;border-radius:52px 52px 6px 6px;background:linear-gradient(155deg,#d4885c 0%,#c07040 25%,#a05830 50%,#8b4518 80%,#6b3410 100%);position:relative;box-shadow:inset 0 -10px 20px rgba(0,0,0,.35),inset 0 6px 12px rgba(255,220,180,.1),0 5px 12px rgba(0,0,0,.4)}
         .bowl-body::before{content:'';position:absolute;top:12%;left:18%;width:26%;height:36%;border-radius:50%;background:radial-gradient(ellipse,rgba(255,240,210,.25),transparent 70%);transform:rotate(-15deg);pointer-events:none}
         .bowl-body::after{content:'';position:absolute;top:44%;left:8%;right:8%;height:1.5px;background:linear-gradient(90deg,transparent,rgba(255,220,180,.12),transparent);pointer-events:none}
-        .bowl-rim{position:absolute;bottom:-4px;left:-3px;right:-3px;height:9px;border-radius:50%;background:linear-gradient(to bottom,#c47a4e,#7a3c12);box-shadow:0 2px 5px rgba(0,0,0,.3)}
+        .bowl-rim{position:absolute;bottom:-3px;left:-2px;right:-2px;height:7px;border-radius:50%;background:linear-gradient(to bottom,#c47a4e,#7a3c12);box-shadow:0 2px 4px rgba(0,0,0,.3)}
         
-        .bowl-label{position:absolute;bottom:0;display:flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:8px;background:linear-gradient(to bottom, #3a3227, #221c15);border:1px solid rgba(255,255,255,.08);box-shadow:0 4px 10px rgba(0,0,0,0.5);z-index:15;color:#d8cfc0;}
-        .ltxt{font-family:'Fredoka';font-size:.75rem;font-weight:600}
+        .bowl-label{position:absolute;bottom:0;display:flex;align-items:center;gap:.3rem;padding:.2rem .6rem;border-radius:6px;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.05);z-index:15}
+        .ltxt{font-family:'Fredoka';font-size:.7rem;font-weight:600;color:#e6dfd1}
+
+        .bowl-slot.shuffling .bowl-assembly { animation: shuffleMove .3s ease-in-out; }
+        .bowl-slot.shuffling:nth-child(1) .bowl-assembly { animation-delay: 0s; }
+        .bowl-slot.shuffling:nth-child(2) .bowl-assembly { animation-delay: .05s; }
+        .bowl-slot.shuffling:nth-child(3) .bowl-assembly { animation-delay: .1s; }
+        .bowl-slot.shuffling:nth-child(4) .bowl-assembly { animation-delay: .15s; }
+        @keyframes shuffleMove { 0%{transform:translateX(0)} 25%{transform:translateX(-8px) rotate(-3deg)} 50%{transform:translateX(8px) rotate(3deg)} 75%{transform:translateX(-5px) rotate(-2deg)} 100%{transform:translateX(0) rotate(0deg)} }
 
         .token-glow {
-            width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 1.4rem; color: #fff; box-shadow: 0 0 25px var(--tk-color), inset 0 0 15px rgba(255,255,255,0.4);
-            background: radial-gradient(circle, var(--tk-color) 30%, #111 100%); border: 2px solid rgba(255,255,255,0.7);
-            transform: translateY(10px); animation: floatToken 2s ease-in-out infinite alternate;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: #fff;
+            box-shadow: 0 0 20px var(--tk-color), inset 0 0 10px rgba(255,255,255,0.4);
+            background: radial-gradient(circle, var(--tk-color) 30%, #111 100%);
+            border: 2px solid rgba(255,255,255,0.7);
+            animation: floatToken 2s ease-in-out infinite alternate;
         }
         @keyframes floatToken {
-            0% { transform: translateY(10px); box-shadow: 0 0 15px var(--tk-color), inset 0 0 10px rgba(255,255,255,0.3); }
-            100% { transform: translateY(-5px); box-shadow: 0 0 35px var(--tk-color), inset 0 0 20px rgba(255,255,255,0.6); }
+            0% { transform: translateY(5px); box-shadow: 0 0 10px var(--tk-color); }
+            100% { transform: translateY(-5px); box-shadow: 0 0 25px var(--tk-color); }
         }
 
-        .hint-text{text-align:center;margin-top:1rem;font-size:.85rem;color:var(--text-muted);animation:hP 2s ease-in-out infinite}
-        @keyframes hP{0%,100%{opacity:.6}50%{opacity:1}}
+        .hint-text{text-align:center;margin-top:1.5rem;font-size:.8rem;color:var(--text-muted);animation:hP 2s ease-in-out infinite;width:90%}
+        @keyframes hP{0%,100%{opacity:.5}50%{opacity:1}}
 
-        .result-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,8,6,.88);backdrop-filter:blur(10px);z-index:100;display:flex;align-items:center;justify-content:center;padding:1.2rem;opacity:0;pointer-events:none;transition:opacity .4s;overflow-y:auto}
+        .result-overlay{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(10,8,6,.92);backdrop-filter:blur(8px);z-index:100;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .4s;overflow-y:auto;overflow-x:hidden;}
         .result-overlay.active{opacity:1;pointer-events:auto}
-        .result-card{background:linear-gradient(160deg,var(--surface-light),var(--surface));border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:2rem;max-width:550px;width:100%;position:relative;transform:translateY(30px) scale(.95);transition:transform .5s cubic-bezier(.34,1.56,.64,1);box-shadow:0 25px 50px rgba(0,0,0,0.6)}
+        
+        .result-card{background:linear-gradient(160deg,var(--surface-light),var(--surface));border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:1.8rem 1.5rem;width:95%;max-width:750px;position:relative;transform:translateY(20px) scale(.95);transition:transform .4s cubic-bezier(.34,1.56,.64,1);box-shadow:0 15px 40px rgba(0,0,0,0.6);margin:auto;}
         .result-overlay.active .result-card{transform:translateY(0) scale(1)}
         
-        .r-player{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .8rem;border-radius:8px;background:rgba(0,0,0,.3);font-size:.8rem;color:var(--text-muted);margin-bottom:.8rem}
+        .r-player{display:inline-flex;align-items:center;gap:.3rem;padding:.3rem .8rem;border-radius:8px;background:rgba(0,0,0,.25);font-size:.85rem;color:var(--text-muted);margin-bottom:.8rem}
         .r-player strong{color:var(--gold)}
-        .r-badge{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:10px;font-family:'Fredoka';font-size:.85rem;font-weight:600;margin-bottom:.8rem;box-shadow:0 4px 15px rgba(0,0,0,0.2)}
-        .r-title{font-family:'Fredoka';font-size:1.6rem;font-weight:700;margin-bottom:.3rem}
-        .r-subtitle{font-size:.95rem;color:var(--text);font-weight:600;margin-bottom:1.2rem;opacity:0.9}
+        .r-badge{display:inline-flex;align-items:center;gap:.35rem;padding:.4rem 1rem;border-radius:10px;font-family:'Fredoka';font-size:.9rem;font-weight:600;margin-bottom:.6rem}
+        .r-title{font-family:'Fredoka';font-size:1.6rem;font-weight:700;margin-bottom:.2rem;line-height:1.2}
+        .r-subtitle{font-size:.9rem;color:var(--text);font-weight:600;margin-bottom:1rem;opacity:0.9;line-height:1.3}
         
-        .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);margin:1.2rem 0}
-        .outline-title{font-family:'Fredoka';font-size:1.05rem;font-weight:600;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem}
+        .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);margin:1rem 0}
         
-        .slide-item{display:flex;gap:.8rem;align-items:flex-start;padding:.7rem .85rem;border-radius:12px;margin-bottom:.5rem;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.05);transition:border-color .2s;flex-direction:column}
+        .outline-title{font-family:'Fredoka';font-size:1rem;font-weight:600;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+        
+        .slides-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        @media (max-width: 600px) { .slides-grid { grid-template-columns: 1fr; } }
+        
+        .slide-item{display:flex;gap:.8rem;align-items:flex-start;padding:.8rem;border-radius:12px;background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.04);transition:border-color .2s;height:100%}
         .slide-item:hover{border-color:rgba(255,255,255,.15)}
-        .slide-item-header { display: flex; gap: .8rem; align-items: flex-start; width: 100%; }
-        .slide-num{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Fredoka';font-size:.8rem;font-weight:700;flex-shrink:0;color:var(--bg)}
-        .slide-info{flex:1}
-        .slide-name{font-weight:700;font-size:.85rem;margin-bottom:.2rem;color:var(--text)}
-        .slide-detail{font-size:.8rem;color:var(--text-muted);line-height:1.5}
-        
-        /* STYLE TAMBAHAN UNTUK FITUR TIPS */
-        .slide-tip {
-            margin-top: .6rem;
-            margin-left: 2.5rem; /* Menyesuaikan dengan lebar nomor slide */
-            padding: .5rem .75rem;
-            background: rgba(232,168,56,0.12);
-            border-left: 3px solid var(--gold);
-            border-radius: 6px;
-            font-size: .8rem;
-            color: #ebd197;
-            line-height: 1.4;
-            display: flex;
-            gap: .5rem;
-            align-items: flex-start;
-        }
-        .slide-tip i { color: var(--gold); margin-top: .15rem; font-size: .9rem; }
-        
-        .btn-next{font-family:'Fredoka';font-size:1.1rem;font-weight:600;padding:.85rem 2.2rem;border:none;border-radius:14px;background:linear-gradient(135deg,#4ac47a,#2e9e5a);color:#fff;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 20px rgba(74,196,122,.3);width:100%;margin-top:1.5rem}
-        .btn-next:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(74,196,122,.45)}
+        .slide-num{width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Fredoka';font-size:.85rem;font-weight:700;flex-shrink:0;color:var(--bg)}
+        .slide-info{flex:1;display:flex;flex-direction:column}
+        .slide-name{font-weight:700;font-size:.9rem;margin-bottom:.3rem;color:var(--text)}
+        .slide-detail{font-size:.8rem;color:var(--text-muted);line-height:1.5;flex:1}
+
+        .tips-box{background:rgba(232,168,56,0.08);border:1px dashed rgba(232,168,56,0.3);border-radius:8px;padding:.8rem;margin-top:.8rem;font-size:.8rem;color:var(--text);line-height:1.4;display:flex;gap:.5rem;align-items:flex-start}
+        .tips-icon{color:var(--gold);font-size:1rem;margin-top:.1rem;animation:hP 2s infinite}
+        .tips-content strong{color:var(--gold);display:block;margin-bottom:.2rem;font-size:.85rem}
+
+        .btn-next{font-family:'Fredoka';font-size:.95rem;font-weight:600;padding:.8rem 2rem;border:none;border-radius:12px;background:linear-gradient(135deg,#4ac47a,#2e9e5a);color:#fff;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 15px rgba(74,196,122,.3);width:100%;margin-top:1.2rem}
+        .btn-next:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(74,196,122,.4)}
         .btn-next:active{transform:translateY(0) scale(.98)}
 
-        .confetti-piece{position:fixed;z-index:200;pointer-events:none;opacity:0}
-        .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface-light);border:1px solid rgba(255,255,255,.15);color:var(--text);padding:.75rem 1.6rem;border-radius:14px;font-size:.9rem;font-weight:600;z-index:300;opacity:0;transition:all .4s cubic-bezier(.34,1.56,.64,1);pointer-events:none;box-shadow:0 10px 40px rgba(0,0,0,.6)}
+        .confetti-piece{position:absolute;z-index:200;pointer-events:none;opacity:0}
+        .toast{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface-light);border:1px solid rgba(255,255,255,.08);color:var(--text);padding:.6rem 1.2rem;border-radius:10px;font-size:.8rem;font-weight:600;z-index:300;opacity:0;transition:all .4s;pointer-events:none;box-shadow:0 8px 25px rgba(0,0,0,.4);white-space:nowrap}
         .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-        @media(max-width:560px){
-            .bowl-slot{width:108px;height:175px}.bowl-assembly{width:108px;height:78px}.bowl-body{border-radius:54px 54px 6px 6px}
-            .bowl-slot.lifted .bowl-assembly{transform:translateY(-82px) rotateX(-10deg)}
-            .table{padding:1.4rem .6rem 1rem;border-radius:16px}.result-card{padding:1.5rem}
-            .name-card{padding:2rem 1.5rem}
-            .token-glow { width: 40px; height: 40px; font-size: 1.2rem; }
-            .slide-tip { margin-left: 0; margin-top: .8rem; }
-        }
+        /* Scrollbar custom for app container */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
         @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
     </style>
 </head>
 <body>
-    <div class="bg-glow bg-glow-1"></div>
-    <div class="bg-glow bg-glow-2"></div>
-    <div id="bg-particles"></div>
-
-    <div id="name-screen" class="screen">
-        <div class="name-card">
-            <div style="font-size:2.2rem;margin-bottom:.5rem;opacity:.8">
-                <i class="fa-solid fa-bowl-food" style="color:var(--terracotta)"></i>
-            </div>
-            <h1>Mangkok Misteri</h1>
-            <p class="sub">Pilih mangkokmu, dapatkan materi, buat presentasinya!</p>
-
-            <div class="name-input-wrap">
-                <i class="fa-solid fa-users"></i>
-                <input type="text" class="name-input" id="name-input" placeholder="Ketik nama kelompok/siswa..." maxlength="40" autocomplete="off">
-            </div>
-            <div class="name-error" id="name-error"></div>
-            <button class="btn-gold" onclick="submitName()">
-                <i class="fa-solid fa-play" style="margin-right:.4rem"></i> Mulai Bermain
-            </button>
-        </div>
-    </div>
-
-    <div id="game-screen" class="screen hidden">
-        <div class="player-bar">
-            <i class="fa-solid fa-users" style="color:var(--gold);font-size:.8rem"></i>
-            <span class="pname" id="display-name"></span>
-        </div>
+    
+    <div id="app-container">
         
-        <header class="game-hdr">
-            <h2>Pilih Satu Mangkok Misteri</h2>
-            <div class="topic-badge">
-                <i class="fa-solid fa-layer-group" style="color:var(--gold)"></i> 
-                Topik Tersisa: <span id="topic-counter">16/16</span>
-            </div>
-        </header>
-        
-        <div class="table">
-            <div class="bowls-row" id="bowls-row"></div>
+        <div class="fullscreen-btn" onclick="toggleFullScreen()" title="Layar Penuh" id="fs-btn">
+            <i class="fa-solid fa-expand"></i>
         </div>
-        
-        <p class="hint-text" id="hint-text">
-            <i class="fa-solid fa-arrow-pointer" style="margin-right:.3rem"></i> Klik salah satu mangkok untuk mengungkap isinya
-        </p>
-    </div>
 
-    <div class="result-overlay" id="result-overlay">
-        <div class="result-card" id="result-card">
-            <div class="r-player" id="r-player"></div>
-            <div class="r-badge" id="r-badge"></div>
-            <h2 class="r-title" id="r-title"></h2>
-            <p class="r-subtitle" id="r-subtitle"></p>
-            
-            <div class="divider"></div>
-            
-            <div class="outline-title">
-                <i class="fa-solid fa-file-powerpoint" style="color:var(--gold)"></i>
-                Kerangka Presentasi (4 Slide)
+        <div class="bg-glow bg-glow-1"></div>
+        <div class="bg-glow bg-glow-2"></div>
+        <div id="bg-particles"></div>
+
+        <!-- LAYAR NAMA -->
+        <div id="name-screen" class="screen">
+            <div class="name-card">
+                <div style="font-size:2rem;margin-bottom:.5rem;opacity:.8">
+                    <i class="fa-solid fa-bowl-food" style="color:var(--terracotta)"></i>
+                </div>
+                <h1>Pilar Misteri</h1>
+                <p class="sub">Pilih Pilarmu & dapatkan materi presentasi!</p>
+
+                <div class="name-input-wrap">
+                    <i class="fa-solid fa-users"></i>
+                    <input type="text" class="name-input" id="name-input" placeholder="Ketik nama kelompok..." maxlength="40" autocomplete="off">
+                </div>
+                <div class="name-error" id="name-error"></div>
+                <button class="btn-gold" onclick="submitName()">
+                    <i class="fa-solid fa-play" style="margin-right:.4rem"></i> Mulai Main
+                </button>
             </div>
-            <div id="slides-outline"></div>
-            
-            <button class="btn-next" onclick="nextStudent()">
-                <i class="fa-solid fa-check" style="margin-right:.4rem"></i> Siap Mengerjakan!
-            </button>
         </div>
-    </div>
 
-    <div class="toast" id="toast"></div>
+        <!-- LAYAR PERMAINAN -->
+        <div id="game-screen" class="screen hidden">
+            <div class="player-bar">
+                <i class="fa-solid fa-users" style="color:var(--gold);font-size:.8rem"></i>
+                <span class="pname" id="display-name"></span>
+            </div>
+            
+            <header class="game-hdr">
+                <h2>Pilih Satu Mangkok</h2>
+                <div class="topic-badge">
+                    <i class="fa-solid fa-layer-group" style="color:var(--gold)"></i> 
+                    Topik Tersisa: <span id="topic-counter">16/16</span>
+                </div>
+            </header>
+            
+            <div class="table">
+                <div class="bowls-row" id="bowls-row"></div>
+            </div>
+            
+            <p class="hint-text" id="hint-text">
+                <i class="fa-solid fa-arrow-pointer" style="margin-right:.3rem"></i> Klik mangkok untuk mengungkap isinya
+            </p>
+        </div>
+
+        <!-- LAYAR HASIL PRESENTASI -->
+        <div class="result-overlay" id="result-overlay">
+            <div class="result-card" id="result-card">
+                <div class="r-player" id="r-player"></div>
+                <div class="r-badge" id="r-badge"></div>
+                <h2 class="r-title" id="r-title"></h2>
+                <p class="r-subtitle" id="r-subtitle"></p>
+                
+                <div class="divider"></div>
+                
+                <div class="outline-title">
+                    <i class="fa-solid fa-file-powerpoint" style="color:var(--gold)"></i>
+                    Kerangka Presentasi (4 Slide)
+                </div>
+                <!-- Konten dinamis sesuai 4 konsep baru -->
+                <div id="slides-outline"></div>
+                
+                <button class="btn-next" onclick="nextStudent()">
+                    <i class="fa-solid fa-check" style="margin-right:.4rem"></i> Siap Mengerjakan!
+                </button>
+            </div>
+        </div>
+
+        <div class="toast" id="toast"></div>
+
+    </div> <!-- End of app-container -->
 
     <script>
+        
+        // --- DATA PILAR YANG DIPERBARUI (Tanpa Definisi Jawaban Langsung) ---
         const pillarDefs = {
-            'dekomposisi': { name:'Dekomposisi', icon:'fa-puzzle-piece', color:'#e8694a' },
-            'pengenalan-pola': { name:'Pengenalan Pola', icon:'fa-eye', color:'#4a9ee8' },
-            'abstraksi': { name:'Abstraksi', icon:'fa-filter', color:'#4ac47a' },
-            'algoritma': { name:'Desain Algoritma', icon:'fa-list-ol', color:'#e8c84a' }
+            'dekomposisi': { 
+                id: 'dekomposisi', name:'Dekomposisi', icon:'fa-puzzle-piece', color:'#e8694a',
+                tip: 'Pikirkan satu hal yang terasa repot atau berat. Lalu, pecah tugas utama tersebut menjadi 3-4 bagian kecil yang terpisah.'
+            },
+            'pengenalan-pola': { 
+                id: 'pengenalan-pola', name:'Pengenalan Pola', icon:'fa-eye', color:'#4a9ee8',
+                tip: 'Ingat-ingat kejadian di sekitarmu yang sering berulang. "Setiap kali [A] terjadi, biasanya [B] akan menyusul." Gunakan itu sebagai panduan!'
+            },
+            'abstraksi': { 
+                id: 'abstraksi', name:'Abstraksi', icon:'fa-filter', color:'#4ac47a',
+                tip: 'Fokus pada hal yang paling PENTING saja. Abaikan detail pelengkap seperti warna, lokasi, atau hiasan yang tidak mengubah fungsi utamanya.'
+            },
+            'algoritma': { 
+                id: 'algoritma', name:'Desain Algoritma', icon:'fa-list-ol', color:'#e8c84a',
+                tip: 'Bayangkan kamu memberi instruksi kepada robot yang tidak tahu apa-apa. Buatlah langkah demi langkah dari nomor 1 sampai akhir dengan jelas.'
+            }
         };
 
-        // 16 Topik Unik dengan tambahan "tips" pada slide ke-3 (Buat Contoh Sendiri)
+        // 16 Topik Unik yang tersedia untuk ditarik
         const allTopics = [
-            // --- DEKOMPOSISI ---
-            { id: 1, pillarId: 'dekomposisi', title: 'Acara Ulang Tahun Kelas',
-              slides: [
-                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Dekomposisi: Memecah masalah/proyek besar menjadi tugas-tugas kecil yang lebih mudah dikerjakan.'},
-                  {name:'Contoh Kehidupan Nyata', detail:'Merencanakan ultah kelas dengan membaginya menjadi divisi: Konsumsi, Dekorasi, dan Susunan Acara.'},
-                  {name:'Buat Contoh Sendiri', detail:'Rancanglah pembagian 4 tugas spesifik untuk persiapan "Pentas Seni Kelas" kelompok kalian.', tips:'Bagi tugas besarnya menjadi 4 peran kecil yang spesifik (misal: bagian musik, latihan, dekor panggung, dokumentasi).'},
-                  {name:'Manfaat Sehari-hari', detail:'Pekerjaan yang terlihat berat menjadi ringan, dan mudah dibagikan kepada anggota tim secara adil.'}
-              ]},
-            { id: 2, pillarId: 'dekomposisi', title: 'Membangun Taman Sekolah',
-              slides: [
-                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Dekomposisi: Memecah proyek kompleks agar tidak membingungkan saat dimulai.'},
-                  {name:'Contoh Kehidupan Nyata', detail:'Membangun taman dipecah menjadi: Menyiapkan tanah, membeli bibit, menanam, dan membuat jadwal siram.'},
-                  {name:'Buat Contoh Sendiri', detail:'Rancanglah langkah-langkah dekomposisi untuk tugas "Membuat Mading Kelas yang Menarik".', tips:'Pikirkan 4 tahapan kecil berurutan, mulai dari mencari ide tema, menyiapkan bahan/kertas, menggambar/menulis konten, hingga menempelkannya.'},
-                  {name:'Manfaat Sehari-hari', detail:'Fokus kita tidak terpecah, bisa menyelesaikan satu per satu bagian hingga proyek besar selesai.'}
-              ]},
-            { id: 3, pillarId: 'dekomposisi', title: 'Persiapan Bazaar Sekolah',
-              slides: [
-                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Dekomposisi: Teknik menganalisis sistem yang besar menjadi sub-sistem terkecil.'},
-                  {name:'Contoh Kehidupan Nyata', detail:'Mengurus stan bazaar dengan membaginya: Menentukan produk jualan, menetapkan harga, dan promosi.'},
-                  {name:'Buat Contoh Sendiri', detail:'Buatlah dekomposisi pembagian tugas harian membersihkan kelas (piket) yang adil untuk 5 orang.', tips:'Bagi area atau jenis pekerjaan piketnya (misal: menyapu, mengepel, menghapus papan, merapikan meja, dan membuang sampah).'},
-                  {name:'Manfaat Sehari-hari', detail:'Mengurangi rasa stres saat menghadapi ujian/tugas berat karena kita tahu dari mana harus mulai.'}
-              ]},
-            { id: 4, pillarId: 'dekomposisi', title: 'Aplikasi Perpustakaan',
-              slides: [
-                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Dekomposisi: Bagaimana programmer memecah kode aplikasi menjadi modul-modul kecil.'},
-                  {name:'Contoh Kehidupan Nyata', detail:'Memecah fitur aplikasi perpus: Fitur Login, Fitur Cari Buku, dan Fitur Peminjaman.'},
-                  {name:'Buat Contoh Sendiri', detail:'Rancanglah pecahan 3 fitur utama jika kalian ditugaskan membuat "Aplikasi Kantin Online Sekolah".', tips:'Bayangkan halaman apa saja yang wajib ada (misal: Menu Makanan, Keranjang Belanja, dan Halaman Pembayaran).'},
-                  {name:'Manfaat Sehari-hari', detail:'Memudahkan pelacakan kesalahan (debugging). Jika ada yang salah, kita tahu bagian mana yang harus diperbaiki.'}
-              ]},
+            { id: 1, pillarId: 'dekomposisi', title: 'Acara Ulang Tahun Kelas' },
+            { id: 2, pillarId: 'dekomposisi', title: 'Membangun Taman Sekolah' },
+            { id: 3, pillarId: 'dekomposisi', title: 'Persiapan Bazaar Sekolah' },
+            { id: 4, pillarId: 'dekomposisi', title: 'Pembuatan Mading Kelas' },
+            
+            { id: 5, pillarId: 'pengenalan-pola', title: 'Pola Cuaca & Bawaan Sekolah' },
+            { id: 6, pillarId: 'pengenalan-pola', title: 'Tren Jajanan Favorit Kantin' },
+            { id: 7, pillarId: 'pengenalan-pola', title: 'Jam Kemacetan Menuju Sekolah' },
+            { id: 8, pillarId: 'pengenalan-pola', title: 'Kebiasaan Baterai Smartphone Habis' },
 
-            // --- PENGENALAN POLA ---
-            { id: 5, pillarId: 'pengenalan-pola', title: 'Pola Cuaca & Kegiatan',
-              slides: [
-                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Pengenalan Pola: Menemukan kesamaan, tren, atau keteraturan dalam data/kejadian.'},
-                  {name:'Contoh Kehidupan Nyata', detail:'Memperhatikan awan gelap dan angin kencang sebagai pola akan turun hujan, sehingga kita membawa payung.'},
-                  {name:'Buat Contoh Sendiri', detail:'Amatilah pola jam kemacetan di jalan sekitar kalian, dan rancanglah strategi berangkat sekolah yang tepat.', tips:'Ingat-ingat jam berapa biasanya jalanan padat merayap, dan tentukan jam berapa kalian harus berangkat agar aman.'},
-                  {name:'Manfaat Sehari-hari', detail:'Membantu kita membuat prediksi masa depan yang akurat dan bersiap-siap lebih awal.'}
-              ]},
-            { id: 6, pillarId: 'pengenalan-pola', title: 'Analisis Kehadiran Siswa',
-              slides: [
-                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Pengenalan Pola: Menggunakan data masa lalu untuk menebak apa yang terjadi selanjutnya.'},
-                  {name:'Contoh Kehidupan Nyata', detail:'Mengenali pola bahwa banyak siswa yang terlambat atau absen saat musim hujan tiba.'},
-                  {name:'Buat Contoh Sendiri', detail:'Sebutkan pola alat tulis apa yang paling sering dipinjam (dan hilang) di kelas, lalu buat solusinya.', tips:'Pikirkan barang apa yang paling dicari-cari teman (misal penghapus/tipex), lalu buat sistem pinjam agar tidak hilang lagi.'},
-                  {name:'Manfaat Sehari-hari', detail:'Menghindari kesalahan yang sama berulang kali dengan belajar dari pengalaman atau pola sebelumnya.'}
-              ]},
-            { id: 7, pillarId: 'pengenalan-pola', title: 'Tren Penjualan Kantin',
-              slides: [
-                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Pengenalan Pola: Mencari hal-hal yang sering muncul bersamaan dalam suatu masalah.'},
-                  {name:'Contoh Kehidupan Nyata', detail:'Ibu kantin mengenali pola bahwa minuman es sangat cepat habis di hari yang terik.'},
-                  {name:'Buat Contoh Sendiri', detail:'Tebaklah pola jajanan apa yang paling cepat habis saat jam istirahat pertama di sekolah kalian.', tips:'Ingat jajanan apa yang antriannya paling panjang dan paling cepat habis dipesan saat bel istirahat berbunyi.'},
-                  {name:'Manfaat Sehari-hari', detail:'Membantu mengambil keputusan bisnis atau strategi harian yang lebih menguntungkan dan efisien.'}
-              ]},
-            { id: 8, pillarId: 'pengenalan-pola', title: 'Pola Penggunaan Gadget',
-              slides: [
-                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Pengenalan Pola: Menemukan kebiasaan atau rutinitas dari sebuah sistem.'},
-                  {name:'Contoh Kehidupan Nyata', detail:'Mengenali pola bahwa baterai HP akan sangat cepat habis jika layar terang dan dipakai main game berat.'},
-                  {name:'Buat Contoh Sendiri', detail:'Amatilah pola waktu belajar kalian di rumah. Di jam berapa kalian paling mudah fokus? Mengapa?', tips:'Perhatikan jam berapa suasana rumah paling tenang dan kondisi tubuhmu masih segar untuk menyerap pelajaran.'},
-                  {name:'Manfaat Sehari-hari', detail:'Kita bisa mengatur waktu, energi, dan sumber daya gadget kita dengan jauh lebih bijak.'}
-              ]},
+            { id: 9, pillarId: 'abstraksi', title: 'Membuat Peta Gerbang ke Kelas' },
+            { id: 10, pillarId: 'abstraksi', title: 'Merangkum Buku Sejarah Tebal' },
+            { id: 11, pillarId: 'abstraksi', title: 'Menulis Resep Masak Sederhana' },
+            { id: 12, pillarId: 'abstraksi', title: 'Desain Ikon Aplikasi Sekolah' },
 
-            // --- ABSTRAKSI ---
-            { id: 9, pillarId: 'abstraksi', title: 'Peta Transportasi Kota',
-              slides: [
-                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Abstraksi: Menyaring informasi yang penting saja dan membuang detail yang tidak relevan.'},
-                  {name:'Contoh Kehidupan Nyata', detail:'Peta KRL/TransJakarta hanya berupa garis warna dan nama stasiun, mengabaikan bentuk asli bangunan/jalan.'},
-                  {name:'Buat Contoh Sendiri', detail:'Buatlah deskripsi denah super sederhana dari gerbang depan sekolah menuju ke kelas kalian.', tips:'Abaikan detail seperti warna cat, letak tong sampah, atau bentuk gedung. Sebutkan arah belokan dan patokan utamanya saja (misal: lewat lapangan -> belok kanan -> naik tangga).'},
-                  {name:'Manfaat Sehari-hari', detail:'Informasi menjadi sangat mudah dan cepat dipahami tanpa membuat otak kita pusing dengan detail.'}
-              ]},
-            { id: 10, pillarId: 'abstraksi', title: 'Desain Ikon Smartphone',
-              slides: [
-                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Abstraksi: Menyembunyikan kerumitan sistem dan hanya menampilkan antarmuka yang simpel.'},
-                  {name:'Contoh Kehidupan Nyata', detail:'Ikon gagang telepon merah untuk menelpon, menyembunyikan ribuan baris kode rumit di dalamnya.'},
-                  {name:'Buat Contoh Sendiri', detail:'Jika kalian membuat aplikasi sekolah, rancanglah ikon simpel yang melambangkan menu "Ruang Guru".', tips:'Jangan menggambar seluruh isi ruangan guru! Pikirkan satu benda simpel yang sangat melambangkan pekerjaan seorang guru (misal: papan tulis kecil, atau kacamata & buku).'},
-                  {name:'Manfaat Sehari-hari', detail:'Membuat teknologi canggih dapat digunakan oleh siapa saja, bahkan oleh anak kecil sekalipun.'}
-              ]},
-            { id: 11, pillarId: 'abstraksi', title: 'Membaca Resep Masakan',
-              slides: [
-                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Abstraksi: Fokus pada tujuan utama dan abaikan latar belakang yang tidak perlu.'},
-                  {name:'Contoh Kehidupan Nyata', detail:'Buku resep hanya menuliskan daftar bahan dan cara masak, tanpa perlu menulis sejarah asal usul makanannya.'},
-                  {name:'Buat Contoh Sendiri', detail:'Tuliskan abstraksi (maksimal 3 langkah inti) cara membuat mie instan goreng dari awal hingga siap makan.', tips:'Fokus pada 3 tindakan utamanya saja. Abaikan detail bertele-tele seperti "menyalakan kompor dengan api sedang" atau "menggunting bungkus mie dengan gunting dapur".'},
-                  {name:'Manfaat Sehari-hari', detail:'Menghemat banyak waktu dan tenaga karena kita langsung menuju pada inti penyelesaian masalah.'}
-              ]},
-            { id: 12, pillarId: 'abstraksi', title: 'Membuat Rangkuman Pelajaran',
-              slides: [
-                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Abstraksi: Teknik mengekstraksi poin-poin krusial dari kumpulan data yang sangat besar.'},
-                  {name:'Contoh Kehidupan Nyata', detail:'Menggunakan stabilo untuk menandai kalimat utama pada buku cetak sejarah yang sangat tebal.'},
-                  {name:'Buat Contoh Sendiri', detail:'Cobalah rangkum dongeng "Bawang Merah & Bawang Putih" hanya dalam 2 kalimat pendek saja.', tips:'Abaikan semua dialog tokoh. Fokuskan hanya pada: Siapa tokoh utamanya, apa konflik utamanya, dan bagaimana akhir ceritanya.'},
-                  {name:'Manfaat Sehari-hari', detail:'Sangat membantu saat belajar untuk ujian, otak tidak kelebihan informasi (overload).'}
-              ]},
-
-            // --- ALGORITMA ---
-            { id: 13, pillarId: 'algoritma', title: 'Langkah Menyeberang Jalan',
-              slides: [
-                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Desain Algoritma: Merancang urutan langkah-langkah yang logis dan terurut untuk menyelesaikan masalah.'},
-                  {name:'Contoh Kehidupan Nyata', detail:'Algoritma menyeberang: 1. Berdiri di tepi, 2. Tengok kanan, 3. Tengok kiri, 4. Tengok kanan lagi, 5. Jalan jika aman.'},
-                  {name:'Buat Contoh Sendiri', detail:'Buatlah urutan langkah (algoritma) yang paling tepat saat terjadi gempa bumi saat kalian di kelas.', tips:'Buat urutan yang mutlak dan menyelamatkan nyawa. (Contoh: 1. Jangan panik, 2. Lindungi kepala, 3. Berlindung di bawah meja kuat...).'},
-                  {name:'Manfaat Sehari-hari', detail:'Mencegah kecelakaan atau kesalahan fatal karena setiap proses dilakukan sesuai prosedur baku.'}
-              ]},
-            { id: 14, pillarId: 'algoritma', title: 'Sistem Antri di Kantin',
-              slides: [
-                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Desain Algoritma: Memastikan setiap langkah berada di posisi yang benar agar hasil akhirnya sukses.'},
-                  {name:'Contoh Kehidupan Nyata', detail:'Algoritma beli makan: Antri di belakang, sebut pesanan, bayar, terima makanan, cari tempat duduk.'},
-                  {name:'Buat Contoh Sendiri', detail:'Rancang aturan langkah-langkah yang harus dilakukan jika ada teman yang meminjam barang kalian agar tidak hilang.', tips:'Buat aturan berurutan 1, 2, 3 (misal: 1. Meminta izin, 2. Memakai dengan hati-hati, 3. Mengembalikan barang langsung ke tangan pemiliknya).'},
-                  {name:'Manfaat Sehari-hari', detail:'Menciptakan ketertiban, keadilan, dan efisiensi dalam kehidupan bersosial.'}
-              ]},
-            { id: 15, pillarId: 'algoritma', title: 'Menyusun Rak Buku',
-              slides: [
-                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Desain Algoritma: Instruksi standar yang berulang (looping) untuk menyelesaikan pekerjaan.'},
-                  {name:'Contoh Kehidupan Nyata', detail:'Algoritma pustakawan: Ambil buku, lihat huruf depan, cari rak sesuai abjad, selipkan buku.'},
-                  {name:'Buat Contoh Sendiri', detail:'Buatlah langkah-langkah (algoritma) merapikan dan menyiapkan isi tas sekolah sebelum tidur malam.', tips:'Mulai dari melihat jadwal pelajaran esok hari, mengambil buku yang sesuai dari rak, hingga memasukkannya tertib ke dalam tas.'},
-                  {name:'Manfaat Sehari-hari', detail:'Pekerjaan yang berulang-ulang bisa dilakukan dengan sangat cepat seperti robot.'}
-              ]},
-            { id: 16, pillarId: 'algoritma', title: 'Mencari Buku Spesifik',
-              slides: [
-                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Desain Algoritma: Cara paling cerdas dan efisien untuk menemukan sesuatu dalam tumpukan data.'},
-                  {name:'Contoh Kehidupan Nyata', detail:'Mencari kata di kamus: Buka bagian tengah, cek abjadnya, buang setengah bagian yang salah, ulangi.'},
-                  {name:'Buat Contoh Sendiri', detail:'Buatlah algoritma tercepat untuk menemukan kemeja seragam tertentu di dalam lemari pakaian yang berantakan.', tips:'Daripada membongkar seluruh isi lemari, pikirkan langkah mencari spesifik di laci/tumpukan khusus pakaian sekolah saja terlebih dahulu.'},
-                  {name:'Manfaat Sehari-hari', detail:'Tidak membuang waktu mencari sesuatu secara acak, semuanya diselesaikan dengan logika matematis.'}
-              ]}
+            { id: 13, pillarId: 'algoritma', title: 'Langkah Aman Menyeberang Jalan' },
+            { id: 14, pillarId: 'algoritma', title: 'Sistem Antri Membeli Makanan' },
+            { id: 15, pillarId: 'algoritma', title: 'Cara Cepat Merapikan Tas Sekolah' },
+            { id: 16, pillarId: 'algoritma', title: 'Prosedur Meminjam Buku Perpus' }
         ];
 
         let availableTopics = [...allTopics];
@@ -384,28 +370,62 @@
                 document.getElementById('name-error').textContent = '';
                 this.style.borderColor = '';
             });
-            setTimeout(() => inp.focus(), 500);
+            // Auto focus if it's likely a desktop (to avoid mobile keyboard popups)
+            if(window.innerWidth > 500) { setTimeout(() => inp.focus(), 500); }
+        }
+
+        function toggleFullScreen() {
+            // Kita fullscreen dokumennya, agar #app-container tetap berada di tengah layar
+            const doc = window.document;
+            const docEl = doc.documentElement;
+            const icon = document.querySelector('#fs-btn i');
+
+            const requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+            const cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+            if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+                if(requestFullScreen) {
+                    requestFullScreen.call(docEl);
+                    icon.classList.remove('fa-expand');
+                    icon.classList.add('fa-compress');
+                }
+            } else {
+                if(cancelFullScreen) {
+                    cancelFullScreen.call(doc);
+                    icon.classList.remove('fa-compress');
+                    icon.classList.add('fa-expand');
+                }
+            }
         }
 
         function makeParticles() {
             const c = document.getElementById('bg-particles');
             let h = '';
-            for(let i=0;i<16;i++){
+            for(let i=0;i<12;i++){ // Sedikit dikurangi untuk area 9:16
                 const sz=Math.random()*4+2,x=Math.random()*100,y=Math.random()*100;
                 const dur=Math.random()*6+5,del=Math.random()*5;
-                const col=Math.random()>.5?'rgba(232,168,56,0.13)':'rgba(196,120,74,0.1)';
+                const col=Math.random()>.5?'rgba(232,168,56,0.15)':'rgba(196,120,74,0.1)';
                 h+=`<div class="bg-p" style="width:${sz}px;height:${sz}px;left:${x}%;top:${y}%;background:${col};--d:${dur}s;--dl:${del}s"></div>`;
             }
             c.innerHTML=h;
         }
 
+        function updateCounterDisplay() {
+            document.getElementById('topic-counter').textContent = `${availableTopics.length}/${allTopics.length}`;
+        }
+
         function submitName() {
+            if(availableTopics.length === 0) {
+                toast('Semua topik sudah habis! Refresh untuk ulang.', '#e8694a');
+                return;
+            }
+
             const inp = document.getElementById('name-input');
             const err = document.getElementById('name-error');
             const val = inp.value.trim();
 
             if(!val) {
-                err.textContent = 'Silakan masukkan nama kelompok/siswa!';
+                err.textContent = 'Silakan masukkan nama kelompok!';
                 inp.style.borderColor = '#e8694a';
                 inp.focus();
                 return;
@@ -414,6 +434,7 @@
             err.textContent = '';
             inp.style.borderColor = '';
             playerName = val;
+            inp.blur(); // Hide keyboard on mobile
             startGame();
         }
 
@@ -422,13 +443,30 @@
             document.getElementById('display-name').textContent = playerName;
             updateCounterDisplay();
             
-            const pillarKeys = Object.keys(pillarDefs);
-            currentRoundPillars = pillarKeys.sort(() => 0.5 - Math.random()).map(k => pillarDefs[k]);
+            // Siapkan 4 pilar acak untuk mengisi 4 mangkok. Jika sisa topik tinggal sedikit, kita acak dari topik yang tersisa saja
+            let remainingPillarIds = [...new Set(availableTopics.map(t => t.pillarId))];
+            
+            // Pastikan kita memiliki 4 pilar untuk 4 mangkok. Jika sisa pilar < 4, penuhi dengan dummy/pilar lain agar tampilan tetap 4 mangkok
+            let pillarsToPlace = [];
+            while(pillarsToPlace.length < 4) {
+                // Ambil pilar unik jika masih ada
+                if(remainingPillarIds.length > 0) {
+                    const rIdx = Math.floor(Math.random() * remainingPillarIds.length);
+                    pillarsToPlace.push(pillarDefs[remainingPillarIds[rIdx]]);
+                    remainingPillarIds.splice(rIdx, 1);
+                } else {
+                    // Jika kurang, tambahkan pilar acak dari semua definisi (walau mungkin topiknya habis)
+                    const allKeys = Object.keys(pillarDefs);
+                    pillarsToPlace.push(pillarDefs[allKeys[Math.floor(Math.random() * allKeys.length)]]);
+                }
+            }
+
+            currentRoundPillars = pillarsToPlace.sort(() => 0.5 - Math.random());
             
             renderBowls();
             switchTo('game-screen');
 
-            document.getElementById('hint-text').innerHTML = '<i class="fa-solid fa-shuffle" style="margin-right:.3rem;color:var(--gold)"></i> Mengacak posisi pilar...';
+            document.getElementById('hint-text').innerHTML = '<i class="fa-solid fa-shuffle" style="margin-right:.3rem;color:var(--gold)"></i> Mengacak posisi mangkok...';
             
             const slots = document.querySelectorAll('.bowl-slot');
             slots.forEach(s => s.classList.add('shuffling'));
@@ -459,90 +497,103 @@
                     </div>
                 </div>
             `).join('');
-            
-            document.querySelectorAll('.bowl-assembly').forEach(el => {
-                el.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click()} });
-            });
         }
 
-        function clickBowl(i) {
+        function clickBowl(idx) {
             if(S.busy) return;
+            const slot = document.getElementById(`bs${idx}`);
+            if(slot.classList.contains('dimmed') || slot.classList.contains('shuffling') || slot.classList.contains('revealed')) return;
+
             S.busy = true;
+            const p = currentRoundPillars[idx];
 
-            const slot = document.getElementById(`bs${i}`);
-            if(slot.classList.contains('shuffling') || slot.classList.contains('revealed')) return;
-
-            document.querySelectorAll('.bowl-slot').forEach((el, idx) => {
-                if(idx !== i) el.classList.add('dimmed');
-            });
-
-            slot.classList.add('lifted', 'revealed');
-            document.getElementById(`ba${i}`).classList.add('locked');
-            document.getElementById('hint-text').innerHTML = '<i class="fa-solid fa-star" style="color:var(--gold);margin-right:.3rem"></i> Pilar ditemukan!';
-
-            const revealedPillarDef = currentRoundPillars[i];
+            // Cek apakah ada topik tersedia untuk pilar ini
+            const availableForPillar = availableTopics.filter(t => t.pillarId === p.id);
             
-            let topicIndex = availableTopics.findIndex(t => t.pillarId === Object.keys(pillarDefs).find(key => pillarDefs[key].name === revealedPillarDef.name));
-            
-            if (topicIndex === -1) {
-                availableTopics = [...allTopics]; 
-                toast('Bank soal habis! Semua topik direset ulang (16/16).', '#4ac47a');
-                topicIndex = availableTopics.findIndex(t => t.pillarId === Object.keys(pillarDefs).find(key => pillarDefs[key].name === revealedPillarDef.name));
+            if(availableForPillar.length === 0) {
+                // Jika zonk (topik untuk pilar ini sudah habis)
+                toast('Materi pilar ini sudah habis, coba pilih mangkok lain!', '#e8694a');
+                document.getElementById(`ba${idx}`).classList.add('locked');
+                slot.classList.add('dimmed');
+                S.busy = false;
+                return;
             }
 
-            const chosenTopic = availableTopics.splice(topicIndex, 1)[0];
-            updateCounterDisplay();
+            // Meredupkan mangkok yang tidak dipilih
+            for(let i=0; i<4; i++) {
+                if(i !== idx) document.getElementById(`bs${i}`).classList.add('dimmed');
+            }
+
+            slot.classList.add('lifted', 'revealed');
+
+            // Mengambil 1 topik secara acak dari yang tersedia untuk pilar ini
+            const rIdx = Math.floor(Math.random() * availableForPillar.length);
+            const selectedTopic = availableForPillar[rIdx];
+            
+            // Menghapus topik terpilih dari daftar utama
+            const mainIdx = availableTopics.findIndex(t => t.id === selectedTopic.id);
+            availableTopics.splice(mainIdx, 1);
 
             setTimeout(() => {
-                confetti(revealedPillarDef.color);
-                setTimeout(() => { 
-                    showBriefing(chosenTopic, revealedPillarDef); 
-                    S.busy = false; 
-                }, 1300);
-            }, 600);
+                showResult(p, selectedTopic);
+            }, 700);
         }
 
-        function updateCounterDisplay() {
-            document.getElementById('topic-counter').textContent = `${availableTopics.length}/16`;
-        }
-
-        function showBriefing(topic, pillarDef) {
-            document.getElementById('r-player').innerHTML = `<i class="fa-solid fa-users" style="font-size:.75rem"></i> Kelompok: <strong>${playerName}</strong>`;
+        function showResult(p, t) {
+            document.getElementById('r-player').innerHTML = `<i class="fa-solid fa-user" style="font-size:.7rem"></i> <strong>${playerName}</strong>`;
+            document.getElementById('r-badge').innerHTML = `<i class="fa-solid ${p.icon}"></i> Pilar: ${p.name}`;
+            document.getElementById('r-badge').style.cssText = `background:${p.color}15;color:${p.color};border:1px solid ${p.color}30`;
             
-            document.getElementById('r-badge').innerHTML = `<i class="fa-solid ${pillarDef.icon}"></i> ${pillarDef.name}`;
-            document.getElementById('r-badge').style.cssText = `background:${pillarDef.color}15;color:${pillarDef.color};border:1px solid ${pillarDef.color}40`;
+            document.getElementById('r-title').textContent = t.title;
+            document.getElementById('r-title').style.color = p.color;
+            document.getElementById('r-subtitle').textContent = `Fokus Materi: Konsep ${p.name}`;
             
-            document.getElementById('r-title').textContent = topic.title;
-            document.getElementById('r-title').style.color = pillarDef.color;
-            
-            document.getElementById('r-subtitle').textContent = "Tema Presentasi Kelompokmu";
-            
-            // Render slides dan masukan Tips jika ada
-            document.getElementById('slides-outline').innerHTML = topic.slides.map((s, idx) => {
-                let tipHtml = '';
-                if(s.tips) {
-                    tipHtml = `<div class="slide-tip">
-                                  <i class="fa-regular fa-lightbulb"></i> 
-                                  <span><strong>Tips:</strong> ${s.tips}</span>
-                               </div>`;
-                }
-                
-                return `
-                <div class="slide-item">
-                    <div class="slide-item-header">
-                        <div class="slide-num" style="background:${pillarDef.color}">${idx+1}</div>
+            // MEMBUAT SLIDES SECARA DINAMIS (Instruksi pencarian, bukan jawaban)
+            const slidesHTML = `
+                <div class="slides-grid">
+                    <div class="slide-item">
+                        <div class="slide-num" style="background:${p.color}">1</div>
                         <div class="slide-info">
-                            <div class="slide-name">${s.name}</div>
-                            <div class="slide-detail">${s.detail}</div>
+                            <div class="slide-name">Penjelasan Materi</div>
+                            <div class="slide-detail">Berikan penjelasan tentang pengertian pilar <strong>${p.name}</strong> yang sudah diambil menggunakan bahasa dan pemahaman kelompok kalian sendiri.</div>
                         </div>
                     </div>
-                    ${tipHtml}
+                    <div class="slide-item">
+                        <div class="slide-num" style="background:${p.color}">2</div>
+                        <div class="slide-info">
+                            <div class="slide-name">Analisis Perbedaan</div>
+                            <div class="slide-detail">Jelaskan apa yang membuat konsep <strong>${p.name}</strong> ini berbeda dari pilar-pilar Berpikir Komputasional lainnya (sebutkan ciri khas utamanya).</div>
+                        </div>
+                    </div>
+                    <div class="slide-item">
+                        <div class="slide-num" style="background:${p.color}">3</div>
+                        <div class="slide-info">
+                            <div class="slide-name">Contoh Penerapan</div>
+                            <div class="slide-detail">Buatlah rancangan penerapan dari pilar <strong>${p.name}</strong> untuk menyelesaikan/mengerjakan topik permasalahan: <br><strong style="color:var(--text);font-size:.85rem">"${t.title}"</strong>.</div>
+                            <div class="tips-box">
+                                <div class="tips-icon"><i class="fa-solid fa-lightbulb"></i></div>
+                                <div class="tips-content">
+                                    <strong>Tips Pengerjaan:</strong>
+                                    ${p.tip}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide-item">
+                        <div class="slide-num" style="background:${p.color}">4</div>
+                        <div class="slide-info">
+                            <div class="slide-name">Manfaat & Kesimpulan</div>
+                            <div class="slide-detail">Sebutkan minimal 2 keuntungan/manfaat jika kita menerapkan pendekatan ini saat menghadapi masalah tersebut di dunia nyata.</div>
+                        </div>
+                    </div>
                 </div>
-                `;
-            }).join('');
+            `;
             
-            document.getElementById('result-card').style.borderTop = `4px solid ${pillarDef.color}`;
+            document.getElementById('slides-outline').innerHTML = slidesHTML;
+            document.getElementById('result-card').style.borderTop = `4px solid ${p.color}`;
+            
             document.getElementById('result-overlay').classList.add('active');
+            confetti(p.color);
         }
 
         function nextStudent() {
@@ -551,9 +602,14 @@
             inp.value = '';
             playerName = '';
             
+            if(availableTopics.length === 0) {
+                toast('Semua topik telah berhasil diambil!', '#4ac47a');
+                document.querySelector('.sub').innerHTML = '<strong style="color:var(--gold)">Selesai!</strong> Tidak ada topik tersisa.';
+            }
+            
             setTimeout(() => {
                 switchTo('name-screen');
-                setTimeout(() => inp.focus(), 400);
+                if(window.innerWidth > 500 && availableTopics.length > 0) { setTimeout(() => inp.focus(), 400); }
             }, 400);
         }
 
@@ -570,21 +626,23 @@
 
         function confetti(pillarColor) {
             const cols = [pillarColor, pillarColor, '#f5efe6', '#e8a838']; 
-            for(let i=0;i<65;i++){
+            const container = document.getElementById('app-container'); // Confetti hanya jatuh di dalam container app
+            
+            for(let i=0;i<50;i++){
                 const el = document.createElement('div'); el.className = 'confetti-piece';
-                const sz = Math.random()*7+5, x = Math.random()*100;
+                const sz = Math.random()*6+4, x = Math.random()*100;
                 const c = cols[Math.floor(Math.random()*cols.length)];
-                const dur = Math.random()*2+1.5, del = Math.random()*.4;
-                const rot = Math.random()*1080-540, drift = (Math.random()-.5)*250;
-                const br = Math.random()>.4 ? '50%' : '3px';
+                const dur = Math.random()*2+1.5, del = Math.random()*.3;
+                const rot = Math.random()*1080-540, drift = (Math.random()-.5)*200;
+                const br = Math.random()>.4 ? '50%' : '2px';
                 
-                el.style.cssText = `left:${x}%;width:${sz}px;height:${sz*.7}px;background:${c};border-radius:${br};box-shadow:0 0 5px ${c}80`;
+                el.style.cssText = `left:${x}%;width:${sz}px;height:${sz*.7}px;background:${c};border-radius:${br};box-shadow:0 0 4px ${c}60`;
                 el.animate([
                     {transform:'translateX(0) translateY(-20px) rotate(0deg) scale(1)',opacity:1},
-                    {transform:`translateX(${drift}px) translateY(100vh) rotate(${rot}deg) scale(.5)`,opacity:0}
+                    {transform:`translateX(${drift}px) translateY(${container.offsetHeight}px) rotate(${rot}deg) scale(.6)`,opacity:0}
                 ],{duration:dur*1000,delay:del*1000,easing:'cubic-bezier(.25,.46,.45,.94)',fill:'forwards'});
                 
-                document.body.appendChild(el);
+                container.appendChild(el);
                 setTimeout(() => el.remove(), (dur+del)*1000+50);
             }
         }
