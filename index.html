@@ -30,10 +30,11 @@
         .screen{position:relative;z-index:10;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1rem;transition:opacity .5s,transform .5s}
         .screen.hidden{opacity:0;pointer-events:none;position:absolute;top:0;left:0;right:0;transform:scale(.96)}
 
-        .name-card{background:linear-gradient(160deg,var(--surface-light),var(--surface));border:1px solid rgba(255,255,255,.07);border-radius:24px;padding:2.5rem 2rem;max-width:420px;width:100%;text-align:center;position:relative;overflow:hidden}
+        .name-card{background:linear-gradient(160deg,var(--surface-light),var(--surface));border:1px solid rgba(255,255,255,.07);border-radius:24px;padding:2.5rem 2rem;max-width:420px;width:100%;text-align:center;position:relative;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,.4)}
         .name-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--terracotta),var(--gold),var(--gold-light))}
         .name-card h1{font-family:'Fredoka';font-size:clamp(1.8rem,5vw,2.4rem);font-weight:700;background:linear-gradient(135deg,var(--gold),var(--terracotta),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.3rem}
         .name-card .sub{color:var(--text-muted);font-size:.9rem;margin-bottom:1.8rem}
+        
         .name-input-wrap{position:relative;margin-bottom:.5rem}
         .name-input-wrap i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:.9rem}
         .name-input{width:100%;padding:.85rem 1rem .85rem 2.6rem;border-radius:14px;border:2px solid rgba(255,255,255,.08);background:rgba(0,0,0,.25);color:var(--text);font-family:'Nunito';font-size:1rem;font-weight:600;outline:none;transition:border-color .3s,box-shadow .3s}
@@ -46,25 +47,19 @@
         .btn-gold:active{transform:translateY(0) scale(.98)}
         .btn-gold:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
 
-        .btn-next{font-family:'Fredoka';font-size:1.1rem;font-weight:600;padding:.85rem 2.2rem;border:none;border-radius:14px;background:linear-gradient(135deg,#4ac47a,#2e9e5a);color:#fff;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 20px rgba(74,196,122,.3)}
-        .btn-next:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 6px 28px rgba(74,196,122,.45)}
-        .btn-next:active{transform:translateY(0) scale(.98)}
-
-        .player-bar{display:flex;align-items:center;gap:.6rem;margin-bottom:.8rem;padding:.45rem 1rem;border-radius:12px;background:var(--surface);border:1px solid rgba(255,255,255,.06);font-size:.85rem}
+        .player-bar{display:flex;align-items:center;gap:.6rem;margin-bottom:.8rem;padding:.45rem 1rem;border-radius:12px;background:var(--surface);border:1px solid rgba(255,255,255,.06);font-size:.85rem;box-shadow:0 4px 15px rgba(0,0,0,.2)}
         .player-bar .pname{font-weight:700;color:var(--gold)}
-        .game-hdr{text-align:center;margin-bottom:.8rem}
+        .game-hdr{text-align:center;margin-bottom:1rem}
         .game-hdr h2{font-family:'Fredoka';font-size:clamp(1.2rem,3.5vw,1.6rem);font-weight:600}
-        .att-badge{display:inline-flex;align-items:center;gap:.35rem;margin-top:.3rem;padding:.22rem .7rem;border-radius:16px;background:var(--surface);border:1px solid rgba(255,255,255,.05);font-size:.78rem;color:var(--text-muted)}
-        .att-badge span{color:var(--gold);font-weight:700}
+        
+        .topic-badge{display:inline-flex;align-items:center;gap:.35rem;margin-top:.4rem;padding:.3rem .9rem;border-radius:16px;background:linear-gradient(135deg, rgba(232,168,56,0.1), rgba(196,120,74,0.1));border:1px solid rgba(232,168,56,0.2);font-size:.8rem;color:var(--text);font-weight:600}
+        .topic-badge span{color:var(--gold);font-weight:800;font-size:.9rem}
 
         .table{background:linear-gradient(180deg,#3e3222 0%,#4a3c28 30%,#3a2e1e 65%,#4a3c28 100%);border-radius:22px;padding:2.2rem 1.5rem 1.8rem;border:2px solid #2a2015;box-shadow:0 12px 50px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.04);position:relative}
         .table::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent)}
         .bowls-row{display:flex;justify-content:center;align-items:flex-end;gap:clamp(.6rem,2.5vw,1.8rem);flex-wrap:wrap}
 
-        /* Animasi pengacakan mangkok */
-        .bowl-slot.shuffling .bowl-assembly {
-            animation: shuffleMove .35s ease-in-out;
-        }
+        .bowl-slot.shuffling .bowl-assembly { animation: shuffleMove .35s ease-in-out; }
         .bowl-slot.shuffling:nth-child(1) .bowl-assembly { animation-delay: 0s; }
         .bowl-slot.shuffling:nth-child(2) .bowl-assembly { animation-delay: .06s; }
         .bowl-slot.shuffling:nth-child(3) .bowl-assembly { animation-delay: .12s; }
@@ -77,67 +72,100 @@
             100%{ transform: translateX(0) rotate(0deg); }
         }
 
-        .bowl-slot{position:relative;display:flex;flex-direction:column;align-items:center;width:clamp(115px,19vw,155px);height:195px;perspective:600px;opacity:0;transform:translateY(40px);animation:bI .6s ease forwards}
+        .bowl-slot{position:relative;display:flex;flex-direction:column;align-items:center;width:clamp(115px,19vw,155px);height:195px;perspective:600px;opacity:0;transform:translateY(40px);animation:bI .6s ease forwards;transition:opacity 0.4s ease, filter 0.4s ease, transform 0.4s ease;}
         .bowl-slot:nth-child(1){animation-delay:.12s}.bowl-slot:nth-child(2){animation-delay:.24s}.bowl-slot:nth-child(3){animation-delay:.36s}.bowl-slot:nth-child(4){animation-delay:.48s}
         @keyframes bI{to{opacity:1;transform:translateY(0)}}
+        
+        .bowl-slot.dimmed { opacity: 0.35; filter: grayscale(80%) blur(1px); pointer-events: none; transform: scale(0.95) translateY(0); }
+
         .bowl-slot::after{content:'';position:absolute;bottom:42px;width:95px;height:13px;background:radial-gradient(ellipse,rgba(0,0,0,.4) 0%,transparent 70%);border-radius:50%;z-index:1;transition:all .7s cubic-bezier(.34,1.56,.64,1)}
         .bowl-slot.lifted::after{transform:scale(1.7);opacity:.12}
-        .bowl-content-area{position:absolute;bottom:48px;width:75px;height:60px;display:flex;align-items:center;justify-content:center;z-index:2;opacity:0;transition:opacity .3s ease .2s}
+        
+        .bowl-content-area{position:absolute;bottom:48px;width:75px;height:60px;display:flex;align-items:center;justify-content:center;z-index:2;opacity:0;transition:opacity .4s ease .2s}
         .bowl-slot.revealed .bowl-content-area{opacity:1}
+        
         .bowl-assembly{position:absolute;bottom:44px;width:125px;height:90px;z-index:10;cursor:pointer;transition:transform .7s cubic-bezier(.34,1.56,.64,1);transform-origin:center bottom}
-        .bowl-slot:not(.revealed):not(.done):not(.shuffling) .bowl-assembly:hover{animation:wob .6s ease}
+        .bowl-slot:not(.revealed):not(.dimmed):not(.shuffling) .bowl-assembly:hover{animation:wob .6s ease}
         @keyframes wob{0%,100%{transform:rotate(0)}20%{transform:rotate(-3deg)}40%{transform:rotate(3deg)}60%{transform:rotate(-2deg)}80%{transform:rotate(2deg)}}
         .bowl-slot.lifted .bowl-assembly{transform:translateY(-100px) rotateX(-12deg)}
         .bowl-assembly.locked{cursor:default}
+        
         .bowl-body{width:100%;height:100%;border-radius:63px 63px 7px 7px;background:linear-gradient(155deg,#d4885c 0%,#c07040 25%,#a05830 50%,#8b4518 80%,#6b3410 100%);position:relative;box-shadow:inset 0 -12px 25px rgba(0,0,0,.35),inset 0 8px 15px rgba(255,220,180,.1),0 6px 15px rgba(0,0,0,.4)}
         .bowl-body::before{content:'';position:absolute;top:12%;left:18%;width:26%;height:36%;border-radius:50%;background:radial-gradient(ellipse,rgba(255,240,210,.25),transparent 70%);transform:rotate(-15deg);pointer-events:none}
         .bowl-body::after{content:'';position:absolute;top:44%;left:8%;right:8%;height:1.5px;background:linear-gradient(90deg,transparent,rgba(255,220,180,.12),transparent);pointer-events:none}
         .bowl-rim{position:absolute;bottom:-4px;left:-3px;right:-3px;height:9px;border-radius:50%;background:linear-gradient(to bottom,#c47a4e,#7a3c12);box-shadow:0 2px 5px rgba(0,0,0,.3)}
-        .bowl-label{position:absolute;bottom:0;display:flex;align-items:center;gap:.3rem;padding:.25rem .6rem;border-radius:7px;background:rgba(0,0,0,.35);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.05);z-index:15}
-        .ldot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-        .ltxt{font-family:'Fredoka';font-size:.68rem;font-weight:500}
+        
+        .bowl-label{position:absolute;bottom:0;display:flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:8px;background:linear-gradient(to bottom, #3a3227, #221c15);border:1px solid rgba(255,255,255,.08);box-shadow:0 4px 10px rgba(0,0,0,0.5);z-index:15;color:#d8cfc0;}
+        .ltxt{font-family:'Fredoka';font-size:.75rem;font-weight:600}
 
-        .dice-scene{width:48px;height:48px;perspective:200px}
-        .dice-cube{width:100%;height:100%;position:relative;transform-style:preserve-3d;animation:dS 3.5s ease-in-out infinite}
-        @keyframes dS{0%{transform:rotateX(0) rotateY(0)}25%{transform:rotateX(90deg) rotateY(45deg)}50%{transform:rotateX(180deg) rotateY(90deg)}75%{transform:rotateX(270deg) rotateY(135deg)}100%{transform:rotateX(360deg) rotateY(180deg)}}
-        .df{position:absolute;width:48px;height:48px;background:linear-gradient(135deg,#fffef8,#f0e8d4);border:1.5px solid #c8b896;border-radius:8px;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);padding:7px;gap:1px}
-        .df.f{transform:translateZ(24px)}.df.bk{transform:rotateY(180deg) translateZ(24px)}.df.r{transform:rotateY(90deg) translateZ(24px)}.df.l{transform:rotateY(-90deg) translateZ(24px)}.df.t{transform:rotateX(90deg) translateZ(24px)}.df.bt{transform:rotateX(-90deg) translateZ(24px)}
-        .dd{width:7px;height:7px;background:#2d2418;border-radius:50%;align-self:center;justify-self:center}
-        .stone{width:28px;height:20px;background:linear-gradient(145deg,#7a7a7a,#5a5a5a,#4a4a4a);border-radius:50% 50% 45% 45%;box-shadow:0 2px 5px rgba(0,0,0,.4);opacity:.55}
+        .token-glow {
+            width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; color: #fff; box-shadow: 0 0 25px var(--tk-color), inset 0 0 15px rgba(255,255,255,0.4);
+            background: radial-gradient(circle, var(--tk-color) 30%, #111 100%); border: 2px solid rgba(255,255,255,0.7);
+            transform: translateY(10px); animation: floatToken 2s ease-in-out infinite alternate;
+        }
+        @keyframes floatToken {
+            0% { transform: translateY(10px); box-shadow: 0 0 15px var(--tk-color), inset 0 0 10px rgba(255,255,255,0.3); }
+            100% { transform: translateY(-5px); box-shadow: 0 0 35px var(--tk-color), inset 0 0 20px rgba(255,255,255,0.6); }
+        }
+
         .hint-text{text-align:center;margin-top:1rem;font-size:.85rem;color:var(--text-muted);animation:hP 2s ease-in-out infinite}
-        @keyframes hP{0%,100%{opacity:.55}50%{opacity:1}}
+        @keyframes hP{0%,100%{opacity:.6}50%{opacity:1}}
 
         .result-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,8,6,.88);backdrop-filter:blur(10px);z-index:100;display:flex;align-items:center;justify-content:center;padding:1.2rem;opacity:0;pointer-events:none;transition:opacity .4s;overflow-y:auto}
         .result-overlay.active{opacity:1;pointer-events:auto}
-        .result-card{background:linear-gradient(160deg,var(--surface-light),var(--surface));border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:2rem;max-width:520px;width:100%;position:relative;transform:translateY(30px) scale(.95);transition:transform .5s cubic-bezier(.34,1.56,.64,1)}
+        .result-card{background:linear-gradient(160deg,var(--surface-light),var(--surface));border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:2rem;max-width:550px;width:100%;position:relative;transform:translateY(30px) scale(.95);transition:transform .5s cubic-bezier(.34,1.56,.64,1);box-shadow:0 25px 50px rgba(0,0,0,0.6)}
         .result-overlay.active .result-card{transform:translateY(0) scale(1)}
+        
         .r-player{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .8rem;border-radius:8px;background:rgba(0,0,0,.3);font-size:.8rem;color:var(--text-muted);margin-bottom:.8rem}
         .r-player strong{color:var(--gold)}
-        .r-badge{display:inline-flex;align-items:center;gap:.45rem;padding:.35rem .9rem;border-radius:10px;font-family:'Fredoka';font-size:.8rem;font-weight:600;margin-bottom:.8rem}
-        .r-title{font-family:'Fredoka';font-size:1.5rem;font-weight:700;margin-bottom:.5rem}
-        .r-desc{font-size:.9rem;color:var(--text-muted);line-height:1.65;margin-bottom:1rem}
-        .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);margin:1rem 0}
-        .outline-title{font-family:'Fredoka';font-size:1rem;font-weight:600;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem}
-        .slide-item{display:flex;gap:.7rem;align-items:flex-start;padding:.6rem .75rem;border-radius:10px;margin-bottom:.4rem;background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.04);transition:border-color .2s}
-        .slide-item:hover{border-color:rgba(255,255,255,.1)}
-        .slide-num{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Fredoka';font-size:.75rem;font-weight:700;flex-shrink:0;color:var(--bg)}
+        .r-badge{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:10px;font-family:'Fredoka';font-size:.85rem;font-weight:600;margin-bottom:.8rem;box-shadow:0 4px 15px rgba(0,0,0,0.2)}
+        .r-title{font-family:'Fredoka';font-size:1.6rem;font-weight:700;margin-bottom:.3rem}
+        .r-subtitle{font-size:.95rem;color:var(--text);font-weight:600;margin-bottom:1.2rem;opacity:0.9}
+        
+        .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);margin:1.2rem 0}
+        .outline-title{font-family:'Fredoka';font-size:1.05rem;font-weight:600;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem}
+        
+        .slide-item{display:flex;gap:.8rem;align-items:flex-start;padding:.7rem .85rem;border-radius:12px;margin-bottom:.5rem;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.05);transition:border-color .2s;flex-direction:column}
+        .slide-item:hover{border-color:rgba(255,255,255,.15)}
+        .slide-item-header { display: flex; gap: .8rem; align-items: flex-start; width: 100%; }
+        .slide-num{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Fredoka';font-size:.8rem;font-weight:700;flex-shrink:0;color:var(--bg)}
         .slide-info{flex:1}
-        .slide-name{font-weight:700;font-size:.85rem;margin-bottom:.15rem}
-        .slide-detail{font-size:.78rem;color:var(--text-muted);line-height:1.5}
-        .btn-outline{font-family:'Fredoka';font-size:.9rem;font-weight:600;padding:.65rem 1.5rem;border:2px solid rgba(255,255,255,.1);border-radius:12px;background:transparent;color:var(--text);cursor:pointer;transition:all .2s}
-        .btn-outline:hover{border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.04)}
-        .btn-row{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap;margin-top:1.2rem}
+        .slide-name{font-weight:700;font-size:.85rem;margin-bottom:.2rem;color:var(--text)}
+        .slide-detail{font-size:.8rem;color:var(--text-muted);line-height:1.5}
+        
+        /* STYLE TAMBAHAN UNTUK FITUR TIPS */
+        .slide-tip {
+            margin-top: .6rem;
+            margin-left: 2.5rem; /* Menyesuaikan dengan lebar nomor slide */
+            padding: .5rem .75rem;
+            background: rgba(232,168,56,0.12);
+            border-left: 3px solid var(--gold);
+            border-radius: 6px;
+            font-size: .8rem;
+            color: #ebd197;
+            line-height: 1.4;
+            display: flex;
+            gap: .5rem;
+            align-items: flex-start;
+        }
+        .slide-tip i { color: var(--gold); margin-top: .15rem; font-size: .9rem; }
+        
+        .btn-next{font-family:'Fredoka';font-size:1.1rem;font-weight:600;padding:.85rem 2.2rem;border:none;border-radius:14px;background:linear-gradient(135deg,#4ac47a,#2e9e5a);color:#fff;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 20px rgba(74,196,122,.3);width:100%;margin-top:1.5rem}
+        .btn-next:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(74,196,122,.45)}
+        .btn-next:active{transform:translateY(0) scale(.98)}
+
         .confetti-piece{position:fixed;z-index:200;pointer-events:none;opacity:0}
-        .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface-light);border:1px solid rgba(255,255,255,.08);color:var(--text);padding:.65rem 1.4rem;border-radius:12px;font-size:.85rem;font-weight:600;z-index:150;opacity:0;transition:all .4s;pointer-events:none;box-shadow:0 8px 30px rgba(0,0,0,.4)}
+        .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface-light);border:1px solid rgba(255,255,255,.15);color:var(--text);padding:.75rem 1.6rem;border-radius:14px;font-size:.9rem;font-weight:600;z-index:300;opacity:0;transition:all .4s cubic-bezier(.34,1.56,.64,1);pointer-events:none;box-shadow:0 10px 40px rgba(0,0,0,.6)}
         .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
         @media(max-width:560px){
             .bowl-slot{width:108px;height:175px}.bowl-assembly{width:108px;height:78px}.bowl-body{border-radius:54px 54px 6px 6px}
             .bowl-slot.lifted .bowl-assembly{transform:translateY(-82px) rotateX(-10deg)}
-            .dice-scene{width:40px;height:40px}.df{width:40px;height:40px;padding:5px}
-            .df.f{transform:translateZ(20px)}.df.bk{transform:rotateY(180deg) translateZ(20px)}.df.r{transform:rotateY(90deg) translateZ(20px)}.df.l{transform:rotateY(-90deg) translateZ(20px)}.df.t{transform:rotateX(90deg) translateZ(20px)}.df.bt{transform:rotateX(-90deg) translateZ(20px)}
-            .dd{width:6px;height:6px}.table{padding:1.4rem .6rem 1rem;border-radius:16px}.result-card{padding:1.4rem}
-            .name-card{padding:1.8rem 1.4rem}
+            .table{padding:1.4rem .6rem 1rem;border-radius:16px}.result-card{padding:1.5rem}
+            .name-card{padding:2rem 1.5rem}
+            .token-glow { width: 40px; height: 40px; font-size: 1.2rem; }
+            .slide-tip { margin-left: 0; margin-top: .8rem; }
         }
         @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
     </style>
@@ -147,141 +175,207 @@
     <div class="bg-glow bg-glow-2"></div>
     <div id="bg-particles"></div>
 
-    <!-- ===== INPUT NAMA ===== -->
     <div id="name-screen" class="screen">
         <div class="name-card">
-            <div style="font-size:2rem;margin-bottom:.4rem;opacity:.7">
+            <div style="font-size:2.2rem;margin-bottom:.5rem;opacity:.8">
                 <i class="fa-solid fa-bowl-food" style="color:var(--terracotta)"></i>
             </div>
             <h1>Mangkok Misteri</h1>
-            <p class="sub">Temukan dadu, dapatkan materi, buat presentasi Canva</p>
+            <p class="sub">Pilih mangkokmu, dapatkan materi, buat presentasinya!</p>
 
             <div class="name-input-wrap">
-                <i class="fa-solid fa-user"></i>
-                <input type="text" class="name-input" id="name-input" placeholder="Ketik nama lengkapmu..." maxlength="40" autocomplete="off">
+                <i class="fa-solid fa-users"></i>
+                <input type="text" class="name-input" id="name-input" placeholder="Ketik nama kelompok/siswa..." maxlength="40" autocomplete="off">
             </div>
             <div class="name-error" id="name-error"></div>
             <button class="btn-gold" onclick="submitName()">
-                <i class="fa-solid fa-arrow-right" style="margin-right:.4rem"></i> Masuk
+                <i class="fa-solid fa-play" style="margin-right:.4rem"></i> Mulai Bermain
             </button>
-
-            <div style="display:flex;gap:.4rem;align-items:center;justify-content:center;margin-top:1.4rem;flex-wrap:wrap">
-                <div style="display:flex;align-items:center;gap:.3rem;background:var(--bg);border-radius:8px;padding:.3rem .6rem;font-size:.72rem;color:var(--text-muted)">
-                    <span style="width:18px;height:18px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:800;color:var(--bg)">1</span> Cari Dadu
-                </div>
-                <i class="fa-solid fa-chevron-right" style="font-size:.55rem;color:var(--text-muted);opacity:.3"></i>
-                <div style="display:flex;align-items:center;gap:.3rem;background:var(--bg);border-radius:8px;padding:.3rem .6rem;font-size:.72rem;color:var(--text-muted)">
-                    <span style="width:18px;height:18px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:800;color:var(--bg)">2</span> Dapat Materi
-                </div>
-                <i class="fa-solid fa-chevron-right" style="font-size:.55rem;color:var(--text-muted);opacity:.3"></i>
-                <div style="display:flex;align-items:center;gap:.3rem;background:var(--bg);border-radius:8px;padding:.3rem .6rem;font-size:.72rem;color:var(--text-muted)">
-                    <span style="width:18px;height:18px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:800;color:var(--bg)">3</span> Canva
-                </div>
-            </div>
         </div>
     </div>
 
-    <!-- ===== GAME ===== -->
     <div id="game-screen" class="screen hidden">
         <div class="player-bar">
-            <i class="fa-solid fa-user" style="color:var(--gold);font-size:.8rem"></i>
+            <i class="fa-solid fa-users" style="color:var(--gold);font-size:.8rem"></i>
             <span class="pname" id="display-name"></span>
         </div>
+        
         <header class="game-hdr">
-            <h2>Cari Dadu di Balik Mangkok</h2>
-            <div class="att-badge">
-                <i class="fa-solid fa-hand-pointer"></i> Percobaan: <span id="attempt-count">0</span>
+            <h2>Pilih Satu Mangkok Misteri</h2>
+            <div class="topic-badge">
+                <i class="fa-solid fa-layer-group" style="color:var(--gold)"></i> 
+                Topik Tersisa: <span id="topic-counter">16/16</span>
             </div>
         </header>
+        
         <div class="table">
             <div class="bowls-row" id="bowls-row"></div>
         </div>
+        
         <p class="hint-text" id="hint-text">
-            <i class="fa-solid fa-arrow-pointer" style="margin-right:.3rem"></i> Klik mangkok untuk mengangkatnya
+            <i class="fa-solid fa-arrow-pointer" style="margin-right:.3rem"></i> Klik salah satu mangkok untuk mengungkap isinya
         </p>
     </div>
 
-    <!-- ===== BRIEFING ===== -->
     <div class="result-overlay" id="result-overlay">
         <div class="result-card" id="result-card">
             <div class="r-player" id="r-player"></div>
             <div class="r-badge" id="r-badge"></div>
             <h2 class="r-title" id="r-title"></h2>
-            <p class="r-desc" id="r-desc"></p>
+            <p class="r-subtitle" id="r-subtitle"></p>
+            
             <div class="divider"></div>
+            
             <div class="outline-title">
-                <i class="fa-solid fa-list-check" style="color:var(--gold)"></i>
-                Kerangka Presentasi Canva-mu
+                <i class="fa-solid fa-file-powerpoint" style="color:var(--gold)"></i>
+                Kerangka Presentasi (4 Slide)
             </div>
             <div id="slides-outline"></div>
-            <div class="btn-row">
-                <button class="btn-outline" onclick="backToName()">
-                    <i class="fa-solid fa-arrow-left" style="margin-right:.3rem"></i> Kembali
-                </button>
-                <button class="btn-next" onclick="nextStudent()">
-                    <i class="fa-solid fa-user-plus" style="margin-right:.4rem"></i> Siswa Berikutnya
-                </button>
-            </div>
+            
+            <button class="btn-next" onclick="nextStudent()">
+                <i class="fa-solid fa-check" style="margin-right:.4rem"></i> Siap Mengerjakan!
+            </button>
         </div>
     </div>
 
     <div class="toast" id="toast"></div>
 
     <script>
-        const pillars = [
-            {
-                id:'dekomposisi', name:'Dekomposisi', icon:'fa-puzzle-piece', color:'#e8694a',
-                description:'Memecah masalah besar atau kompleks menjadi bagian-bagian kecil yang lebih mudah dikelola dan diselesaikan satu per satu.',
-                slides:[
-                    {name:'Pengenalan Dekomposisi',detail:'Jelaskan apa itu dekomposisi dengan bahasa sederhana dan contoh kehidupan sehari-hari.'},
-                    {name:'Mengapa Perlu Dekomposisi?',detail:'Tunjukkan manfaat: masalah besar jadi tidak menakutkan, lebih mudah dikerjakan tim, dan lebih mudah dicek.'},
-                    {name:'Contoh: Membuat Aplikasi',detail:'Pecah sebuah aplikasi (misal toko online) menjadi modul: produk, keranjang, checkout, pembayaran.'},
-                    {name:'Latihan Coba Sendiri',detail:'Berikan satu masalah kompleks dan minta audiens memecahnya menjadi langkah-langkah kecil.'},
-                    {name:'Kesimpulan',detail:'Ringkas poin utama dan ajak audiens menerapkan dekomposisi dalam tugas sekolah.'}
-                ]
-            },
-            {
-                id:'pengenalan-pola', name:'Pengenalan Pola', icon:'fa-eye', color:'#4a9ee8',
-                description:'Menemukan kesamaan, tren, atau keteraturan dalam data atau masalah agar bisa memahami dan menyelesaikannya lebih cepat.',
-                slides:[
-                    {name:'Apa Itu Pengenalan Pola?',detail:'Jelaskan konsep mengenali kesamaan atau keteraturan yang berulang dalam suatu masalah.'},
-                    {name:'Pola di Kehidupan Sehari-hari',detail:'Contoh: pola cuaca, jadwal bus, lagu yang berulang, atau pola nilai siswa.'},
-                    {name:'Pola dalam Teknologi',detail:'Tunjukkan bagaimana algoritma rekomendasi (YouTube, TikTok) mengenali pola kesukaan pengguna.'},
-                    {name:'Mini Games: Tebak Pola',detail:'Buat slide interaktif berisi deret angka atau gambar berpola, minta audiens menebak lanjutannya.'},
-                    {name:'Kesimpulan',detail:'Tekankan bahwa mengenali pola membantu kita memprediksi dan mengambil keputusan lebih cepat.'}
-                ]
-            },
-            {
-                id:'abstraksi', name:'Abstraksi', icon:'fa-filter', color:'#4ac47a',
-                description:'Menyaring informasi yang penting dan mengabaikan detail yang tidak relevan agar fokus pada inti permasalahan.',
-                slides:[
-                    {name:'Mengenal Abstraksi',detail:'Jelaskan bahwa abstraksi adalah menyembunyikan kompleksitas dan hanya menampilkan yang penting.'},
-                    {name:'Contoh: Peta vs Realita',detail:'Bandingkan peta transportasi (sederhana, fokus jalur) dengan foto satelit (semua detail). Mana yang lebih membantu?'},
-                    {name:'Abstraksi di Dunia Digital',detail:'Tunjukkan ikon-ikon di smartphone: ikon telepon menyembunyikan ribuan baris kode di dalamnya.'},
-                    {name:'Aktivitas: Saring Informasi',detail:'Berikan teks panjang dan minta audiens menyaring hanya 3 informasi terpenting.'},
-                    {name:'Kesimpulan',detail:'Abstraksi membantu kita tidak tenggelam dalam detail dan tetap fokus pada tujuan utama.'}
-                ]
-            },
-            {
-                id:'desain-algoritma', name:'Desain Algoritma', icon:'fa-list-ol', color:'#e8c84a',
-                description:'Merancang langkah-langkah terurut dan logis untuk menyelesaikan masalah secara sistematis dari awal hingga selesai.',
-                slides:[
-                    {name:'Apa Itu Algoritma?',detail:'Jelaskan algoritma sebagai resep atau petunjuk langkah demi langkah untuk menyelesaikan masalah.'},
-                    {name:'Contoh: Resep Masakan',detail:'Pecah resep nasi goreng menjadi langkah terurut. Tunjukkan apa jadinya jika langkahnya acak.'},
-                    {name:'Algoritma di Sekitar Kita',detail:'Contoh: algoritma pencarian Google, navigasi GPS, atau proses antri di kantin.'},
-                    {name:'Tantangan: Buat Algoritma',detail:'Minta audiens menuliskan algoritma untuk kegiatan sederhana (misal: menyikat gigi atau menyeberang jalan).'},
-                    {name:'Kesimpulan',detail:'Algoritma membantu kita berpikir terstruktur dan memastikan tidak ada langkah yang terlewat.'}
-                ]
-            }
+        const pillarDefs = {
+            'dekomposisi': { name:'Dekomposisi', icon:'fa-puzzle-piece', color:'#e8694a' },
+            'pengenalan-pola': { name:'Pengenalan Pola', icon:'fa-eye', color:'#4a9ee8' },
+            'abstraksi': { name:'Abstraksi', icon:'fa-filter', color:'#4ac47a' },
+            'algoritma': { name:'Desain Algoritma', icon:'fa-list-ol', color:'#e8c84a' }
+        };
+
+        // 16 Topik Unik dengan tambahan "tips" pada slide ke-3 (Buat Contoh Sendiri)
+        const allTopics = [
+            // --- DEKOMPOSISI ---
+            { id: 1, pillarId: 'dekomposisi', title: 'Acara Ulang Tahun Kelas',
+              slides: [
+                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Dekomposisi: Memecah masalah/proyek besar menjadi tugas-tugas kecil yang lebih mudah dikerjakan.'},
+                  {name:'Contoh Kehidupan Nyata', detail:'Merencanakan ultah kelas dengan membaginya menjadi divisi: Konsumsi, Dekorasi, dan Susunan Acara.'},
+                  {name:'Buat Contoh Sendiri', detail:'Rancanglah pembagian 4 tugas spesifik untuk persiapan "Pentas Seni Kelas" kelompok kalian.', tips:'Bagi tugas besarnya menjadi 4 peran kecil yang spesifik (misal: bagian musik, latihan, dekor panggung, dokumentasi).'},
+                  {name:'Manfaat Sehari-hari', detail:'Pekerjaan yang terlihat berat menjadi ringan, dan mudah dibagikan kepada anggota tim secara adil.'}
+              ]},
+            { id: 2, pillarId: 'dekomposisi', title: 'Membangun Taman Sekolah',
+              slides: [
+                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Dekomposisi: Memecah proyek kompleks agar tidak membingungkan saat dimulai.'},
+                  {name:'Contoh Kehidupan Nyata', detail:'Membangun taman dipecah menjadi: Menyiapkan tanah, membeli bibit, menanam, dan membuat jadwal siram.'},
+                  {name:'Buat Contoh Sendiri', detail:'Rancanglah langkah-langkah dekomposisi untuk tugas "Membuat Mading Kelas yang Menarik".', tips:'Pikirkan 4 tahapan kecil berurutan, mulai dari mencari ide tema, menyiapkan bahan/kertas, menggambar/menulis konten, hingga menempelkannya.'},
+                  {name:'Manfaat Sehari-hari', detail:'Fokus kita tidak terpecah, bisa menyelesaikan satu per satu bagian hingga proyek besar selesai.'}
+              ]},
+            { id: 3, pillarId: 'dekomposisi', title: 'Persiapan Bazaar Sekolah',
+              slides: [
+                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Dekomposisi: Teknik menganalisis sistem yang besar menjadi sub-sistem terkecil.'},
+                  {name:'Contoh Kehidupan Nyata', detail:'Mengurus stan bazaar dengan membaginya: Menentukan produk jualan, menetapkan harga, dan promosi.'},
+                  {name:'Buat Contoh Sendiri', detail:'Buatlah dekomposisi pembagian tugas harian membersihkan kelas (piket) yang adil untuk 5 orang.', tips:'Bagi area atau jenis pekerjaan piketnya (misal: menyapu, mengepel, menghapus papan, merapikan meja, dan membuang sampah).'},
+                  {name:'Manfaat Sehari-hari', detail:'Mengurangi rasa stres saat menghadapi ujian/tugas berat karena kita tahu dari mana harus mulai.'}
+              ]},
+            { id: 4, pillarId: 'dekomposisi', title: 'Aplikasi Perpustakaan',
+              slides: [
+                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Dekomposisi: Bagaimana programmer memecah kode aplikasi menjadi modul-modul kecil.'},
+                  {name:'Contoh Kehidupan Nyata', detail:'Memecah fitur aplikasi perpus: Fitur Login, Fitur Cari Buku, dan Fitur Peminjaman.'},
+                  {name:'Buat Contoh Sendiri', detail:'Rancanglah pecahan 3 fitur utama jika kalian ditugaskan membuat "Aplikasi Kantin Online Sekolah".', tips:'Bayangkan halaman apa saja yang wajib ada (misal: Menu Makanan, Keranjang Belanja, dan Halaman Pembayaran).'},
+                  {name:'Manfaat Sehari-hari', detail:'Memudahkan pelacakan kesalahan (debugging). Jika ada yang salah, kita tahu bagian mana yang harus diperbaiki.'}
+              ]},
+
+            // --- PENGENALAN POLA ---
+            { id: 5, pillarId: 'pengenalan-pola', title: 'Pola Cuaca & Kegiatan',
+              slides: [
+                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Pengenalan Pola: Menemukan kesamaan, tren, atau keteraturan dalam data/kejadian.'},
+                  {name:'Contoh Kehidupan Nyata', detail:'Memperhatikan awan gelap dan angin kencang sebagai pola akan turun hujan, sehingga kita membawa payung.'},
+                  {name:'Buat Contoh Sendiri', detail:'Amatilah pola jam kemacetan di jalan sekitar kalian, dan rancanglah strategi berangkat sekolah yang tepat.', tips:'Ingat-ingat jam berapa biasanya jalanan padat merayap, dan tentukan jam berapa kalian harus berangkat agar aman.'},
+                  {name:'Manfaat Sehari-hari', detail:'Membantu kita membuat prediksi masa depan yang akurat dan bersiap-siap lebih awal.'}
+              ]},
+            { id: 6, pillarId: 'pengenalan-pola', title: 'Analisis Kehadiran Siswa',
+              slides: [
+                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Pengenalan Pola: Menggunakan data masa lalu untuk menebak apa yang terjadi selanjutnya.'},
+                  {name:'Contoh Kehidupan Nyata', detail:'Mengenali pola bahwa banyak siswa yang terlambat atau absen saat musim hujan tiba.'},
+                  {name:'Buat Contoh Sendiri', detail:'Sebutkan pola alat tulis apa yang paling sering dipinjam (dan hilang) di kelas, lalu buat solusinya.', tips:'Pikirkan barang apa yang paling dicari-cari teman (misal penghapus/tipex), lalu buat sistem pinjam agar tidak hilang lagi.'},
+                  {name:'Manfaat Sehari-hari', detail:'Menghindari kesalahan yang sama berulang kali dengan belajar dari pengalaman atau pola sebelumnya.'}
+              ]},
+            { id: 7, pillarId: 'pengenalan-pola', title: 'Tren Penjualan Kantin',
+              slides: [
+                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Pengenalan Pola: Mencari hal-hal yang sering muncul bersamaan dalam suatu masalah.'},
+                  {name:'Contoh Kehidupan Nyata', detail:'Ibu kantin mengenali pola bahwa minuman es sangat cepat habis di hari yang terik.'},
+                  {name:'Buat Contoh Sendiri', detail:'Tebaklah pola jajanan apa yang paling cepat habis saat jam istirahat pertama di sekolah kalian.', tips:'Ingat jajanan apa yang antriannya paling panjang dan paling cepat habis dipesan saat bel istirahat berbunyi.'},
+                  {name:'Manfaat Sehari-hari', detail:'Membantu mengambil keputusan bisnis atau strategi harian yang lebih menguntungkan dan efisien.'}
+              ]},
+            { id: 8, pillarId: 'pengenalan-pola', title: 'Pola Penggunaan Gadget',
+              slides: [
+                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Pengenalan Pola: Menemukan kebiasaan atau rutinitas dari sebuah sistem.'},
+                  {name:'Contoh Kehidupan Nyata', detail:'Mengenali pola bahwa baterai HP akan sangat cepat habis jika layar terang dan dipakai main game berat.'},
+                  {name:'Buat Contoh Sendiri', detail:'Amatilah pola waktu belajar kalian di rumah. Di jam berapa kalian paling mudah fokus? Mengapa?', tips:'Perhatikan jam berapa suasana rumah paling tenang dan kondisi tubuhmu masih segar untuk menyerap pelajaran.'},
+                  {name:'Manfaat Sehari-hari', detail:'Kita bisa mengatur waktu, energi, dan sumber daya gadget kita dengan jauh lebih bijak.'}
+              ]},
+
+            // --- ABSTRAKSI ---
+            { id: 9, pillarId: 'abstraksi', title: 'Peta Transportasi Kota',
+              slides: [
+                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Abstraksi: Menyaring informasi yang penting saja dan membuang detail yang tidak relevan.'},
+                  {name:'Contoh Kehidupan Nyata', detail:'Peta KRL/TransJakarta hanya berupa garis warna dan nama stasiun, mengabaikan bentuk asli bangunan/jalan.'},
+                  {name:'Buat Contoh Sendiri', detail:'Buatlah deskripsi denah super sederhana dari gerbang depan sekolah menuju ke kelas kalian.', tips:'Abaikan detail seperti warna cat, letak tong sampah, atau bentuk gedung. Sebutkan arah belokan dan patokan utamanya saja (misal: lewat lapangan -> belok kanan -> naik tangga).'},
+                  {name:'Manfaat Sehari-hari', detail:'Informasi menjadi sangat mudah dan cepat dipahami tanpa membuat otak kita pusing dengan detail.'}
+              ]},
+            { id: 10, pillarId: 'abstraksi', title: 'Desain Ikon Smartphone',
+              slides: [
+                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Abstraksi: Menyembunyikan kerumitan sistem dan hanya menampilkan antarmuka yang simpel.'},
+                  {name:'Contoh Kehidupan Nyata', detail:'Ikon gagang telepon merah untuk menelpon, menyembunyikan ribuan baris kode rumit di dalamnya.'},
+                  {name:'Buat Contoh Sendiri', detail:'Jika kalian membuat aplikasi sekolah, rancanglah ikon simpel yang melambangkan menu "Ruang Guru".', tips:'Jangan menggambar seluruh isi ruangan guru! Pikirkan satu benda simpel yang sangat melambangkan pekerjaan seorang guru (misal: papan tulis kecil, atau kacamata & buku).'},
+                  {name:'Manfaat Sehari-hari', detail:'Membuat teknologi canggih dapat digunakan oleh siapa saja, bahkan oleh anak kecil sekalipun.'}
+              ]},
+            { id: 11, pillarId: 'abstraksi', title: 'Membaca Resep Masakan',
+              slides: [
+                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Abstraksi: Fokus pada tujuan utama dan abaikan latar belakang yang tidak perlu.'},
+                  {name:'Contoh Kehidupan Nyata', detail:'Buku resep hanya menuliskan daftar bahan dan cara masak, tanpa perlu menulis sejarah asal usul makanannya.'},
+                  {name:'Buat Contoh Sendiri', detail:'Tuliskan abstraksi (maksimal 3 langkah inti) cara membuat mie instan goreng dari awal hingga siap makan.', tips:'Fokus pada 3 tindakan utamanya saja. Abaikan detail bertele-tele seperti "menyalakan kompor dengan api sedang" atau "menggunting bungkus mie dengan gunting dapur".'},
+                  {name:'Manfaat Sehari-hari', detail:'Menghemat banyak waktu dan tenaga karena kita langsung menuju pada inti penyelesaian masalah.'}
+              ]},
+            { id: 12, pillarId: 'abstraksi', title: 'Membuat Rangkuman Pelajaran',
+              slides: [
+                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Abstraksi: Teknik mengekstraksi poin-poin krusial dari kumpulan data yang sangat besar.'},
+                  {name:'Contoh Kehidupan Nyata', detail:'Menggunakan stabilo untuk menandai kalimat utama pada buku cetak sejarah yang sangat tebal.'},
+                  {name:'Buat Contoh Sendiri', detail:'Cobalah rangkum dongeng "Bawang Merah & Bawang Putih" hanya dalam 2 kalimat pendek saja.', tips:'Abaikan semua dialog tokoh. Fokuskan hanya pada: Siapa tokoh utamanya, apa konflik utamanya, dan bagaimana akhir ceritanya.'},
+                  {name:'Manfaat Sehari-hari', detail:'Sangat membantu saat belajar untuk ujian, otak tidak kelebihan informasi (overload).'}
+              ]},
+
+            // --- ALGORITMA ---
+            { id: 13, pillarId: 'algoritma', title: 'Langkah Menyeberang Jalan',
+              slides: [
+                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Desain Algoritma: Merancang urutan langkah-langkah yang logis dan terurut untuk menyelesaikan masalah.'},
+                  {name:'Contoh Kehidupan Nyata', detail:'Algoritma menyeberang: 1. Berdiri di tepi, 2. Tengok kanan, 3. Tengok kiri, 4. Tengok kanan lagi, 5. Jalan jika aman.'},
+                  {name:'Buat Contoh Sendiri', detail:'Buatlah urutan langkah (algoritma) yang paling tepat saat terjadi gempa bumi saat kalian di kelas.', tips:'Buat urutan yang mutlak dan menyelamatkan nyawa. (Contoh: 1. Jangan panik, 2. Lindungi kepala, 3. Berlindung di bawah meja kuat...).'},
+                  {name:'Manfaat Sehari-hari', detail:'Mencegah kecelakaan atau kesalahan fatal karena setiap proses dilakukan sesuai prosedur baku.'}
+              ]},
+            { id: 14, pillarId: 'algoritma', title: 'Sistem Antri di Kantin',
+              slides: [
+                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Desain Algoritma: Memastikan setiap langkah berada di posisi yang benar agar hasil akhirnya sukses.'},
+                  {name:'Contoh Kehidupan Nyata', detail:'Algoritma beli makan: Antri di belakang, sebut pesanan, bayar, terima makanan, cari tempat duduk.'},
+                  {name:'Buat Contoh Sendiri', detail:'Rancang aturan langkah-langkah yang harus dilakukan jika ada teman yang meminjam barang kalian agar tidak hilang.', tips:'Buat aturan berurutan 1, 2, 3 (misal: 1. Meminta izin, 2. Memakai dengan hati-hati, 3. Mengembalikan barang langsung ke tangan pemiliknya).'},
+                  {name:'Manfaat Sehari-hari', detail:'Menciptakan ketertiban, keadilan, dan efisiensi dalam kehidupan bersosial.'}
+              ]},
+            { id: 15, pillarId: 'algoritma', title: 'Menyusun Rak Buku',
+              slides: [
+                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Desain Algoritma: Instruksi standar yang berulang (looping) untuk menyelesaikan pekerjaan.'},
+                  {name:'Contoh Kehidupan Nyata', detail:'Algoritma pustakawan: Ambil buku, lihat huruf depan, cari rak sesuai abjad, selipkan buku.'},
+                  {name:'Buat Contoh Sendiri', detail:'Buatlah langkah-langkah (algoritma) merapikan dan menyiapkan isi tas sekolah sebelum tidur malam.', tips:'Mulai dari melihat jadwal pelajaran esok hari, mengambil buku yang sesuai dari rak, hingga memasukkannya tertib ke dalam tas.'},
+                  {name:'Manfaat Sehari-hari', detail:'Pekerjaan yang berulang-ulang bisa dilakukan dengan sangat cepat seperti robot.'}
+              ]},
+            { id: 16, pillarId: 'algoritma', title: 'Mencari Buku Spesifik',
+              slides: [
+                  {name:'Pembahasan Pilar', detail:'Jelaskan konsep Desain Algoritma: Cara paling cerdas dan efisien untuk menemukan sesuatu dalam tumpukan data.'},
+                  {name:'Contoh Kehidupan Nyata', detail:'Mencari kata di kamus: Buka bagian tengah, cek abjadnya, buang setengah bagian yang salah, ulangi.'},
+                  {name:'Buat Contoh Sendiri', detail:'Buatlah algoritma tercepat untuk menemukan kemeja seragam tertentu di dalam lemari pakaian yang berantakan.', tips:'Daripada membongkar seluruh isi lemari, pikirkan langkah mencari spesifik di laci/tumpukan khusus pakaian sekolah saja terlebih dahulu.'},
+                  {name:'Manfaat Sehari-hari', detail:'Tidak membuang waktu mencari sesuatu secara acak, semuanya diselesaikan dengan logika matematis.'}
+              ]}
         ];
 
-        const dotPat={1:[0,0,0,0,1,0,0,0,0],2:[0,0,1,0,0,0,1,0,0],3:[0,0,1,0,1,0,1,0,0],4:[1,0,1,0,0,0,1,0,1],5:[1,0,1,0,1,0,1,0,1],6:[1,0,1,1,0,1,1,0,1]};
-
+        let availableTopics = [...allTopics];
         let playerName = '';
-        let lastDiceIdx = -1; // menyimpan posisi dadu sebelumnya
-        let S = { diceIdx:-1, attempts:0, busy:false, found:false };
+        let currentRoundPillars = [];
+        let S = { busy:false };
 
-        /* ===== Init ===== */
         function init() {
             makeParticles();
             const inp = document.getElementById('name-input');
@@ -305,36 +399,13 @@
             c.innerHTML=h;
         }
 
-        /* ===== Acak posisi dadu, dijamin beda dari sebelumnya ===== */
-        function rollDice() {
-            let newIdx;
-            if (lastDiceIdx === -1) {
-                // Putaran pertama, bebas
-                newIdx = Math.floor(Math.random() * 4);
-            } else {
-                // Pastikan beda dari posisi sebelumnya
-                do {
-                    newIdx = Math.floor(Math.random() * 4);
-                } while (newIdx === lastDiceIdx);
-            }
-            lastDiceIdx = newIdx;
-            return newIdx;
-        }
-
-        /* ===== Submit Nama ===== */
         function submitName() {
             const inp = document.getElementById('name-input');
             const err = document.getElementById('name-error');
             const val = inp.value.trim();
 
             if(!val) {
-                err.textContent = 'Nama tidak boleh kosong!';
-                inp.style.borderColor = '#e8694a';
-                inp.focus();
-                return;
-            }
-            if(val.length < 2) {
-                err.textContent = 'Nama terlalu pendek, minimal 2 karakter.';
+                err.textContent = 'Silakan masukkan nama kelompok/siswa!';
                 inp.style.borderColor = '#e8694a';
                 inp.focus();
                 return;
@@ -346,156 +417,173 @@
             startGame();
         }
 
-        /* ===== Mulai Game ===== */
         function startGame() {
-            // Acak dadu di posisi baru (dijamin beda dari sebelumnya)
-            S.diceIdx = rollDice();
-            S.attempts = 0; S.busy = false; S.found = false;
-            document.getElementById('attempt-count').textContent = '0';
+            S.busy = true;
             document.getElementById('display-name').textContent = playerName;
-            document.getElementById('hint-text').innerHTML = '<i class="fa-solid fa-shuffle" style="margin-right:.3rem;color:var(--gold)"></i> Mangkok sedang diacak...';
+            updateCounterDisplay();
+            
+            const pillarKeys = Object.keys(pillarDefs);
+            currentRoundPillars = pillarKeys.sort(() => 0.5 - Math.random()).map(k => pillarDefs[k]);
+            
             renderBowls();
             switchTo('game-screen');
 
-            // Animasi pengacakan mangkok
+            document.getElementById('hint-text').innerHTML = '<i class="fa-solid fa-shuffle" style="margin-right:.3rem;color:var(--gold)"></i> Mengacak posisi pilar...';
+            
             const slots = document.querySelectorAll('.bowl-slot');
             slots.forEach(s => s.classList.add('shuffling'));
 
-            // Setelah animasi acak selesai, baru izinkan klik
             setTimeout(() => {
                 slots.forEach(s => s.classList.remove('shuffling'));
-                document.getElementById('hint-text').innerHTML = '<i class="fa-solid fa-arrow-pointer" style="margin-right:.3rem"></i> Klik mangkok untuk mengangkatnya';
+                document.getElementById('hint-text').innerHTML = '<i class="fa-solid fa-arrow-pointer" style="margin-right:.3rem"></i> Klik salah satu mangkok untuk mengungkap isinya';
+                S.busy = false; 
             }, 1200);
         }
 
         function renderBowls() {
             const row = document.getElementById('bowls-row');
-            row.innerHTML = pillars.map((p,i) => `
+            row.innerHTML = currentRoundPillars.map((p, i) => `
                 <div class="bowl-slot" id="bs${i}">
-                    <div class="bowl-content-area" id="bc${i}"></div>
-                    <div class="bowl-assembly" id="ba${i}" onclick="clickBowl(${i})" role="button" aria-label="Angkat mangkok ${p.name}" tabindex="0">
+                    <div class="bowl-content-area" id="bc${i}">
+                        <div class="token-glow" style="--tk-color: ${p.color}">
+                            <i class="fa-solid ${p.icon}"></i>
+                        </div>
+                    </div>
+                    <div class="bowl-assembly" id="ba${i}" onclick="clickBowl(${i})" role="button" aria-label="Pilih mangkok ${i+1}" tabindex="0">
                         <div class="bowl-body"></div>
                         <div class="bowl-rim"></div>
                     </div>
                     <div class="bowl-label">
-                        <span class="ldot" style="background:${p.color}"></span>
-                        <span class="ltxt">${p.name}</span>
+                        <i class="fa-solid fa-circle-question" style="color:var(--gold)"></i>
+                        <span class="ltxt">Mangkok ${i+1}</span>
                     </div>
                 </div>
             `).join('');
-            pillars.forEach((_,i) => {
-                document.getElementById(`bc${i}`).innerHTML = i===S.diceIdx ? diceHTML() : '<div class="stone"></div>';
-            });
+            
             document.querySelectorAll('.bowl-assembly').forEach(el => {
                 el.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click()} });
             });
         }
 
-        function diceHTML() {
-            const faces=[{c:'f',v:1},{c:'bk',v:6},{c:'r',v:3},{c:'l',v:4},{c:'t',v:2},{c:'bt',v:5}];
-            return `<div class="dice-scene"><div class="dice-cube">${faces.map(f=>{
-                const dots=dotPat[f.v].map(d=>d?'<div class="dd"></div>':'').join('');
-                return `<div class="df ${f.c}">${dots}</div>`;
-            }).join('')}</div></div>`;
-        }
-
-        /* ===== Klik Mangkok ===== */
         function clickBowl(i) {
-            // Blokir klik selama animasi acak masih berjalan
-            if(S.busy || S.found) return;
+            if(S.busy) return;
+            S.busy = true;
+
             const slot = document.getElementById(`bs${i}`);
-            if(slot.classList.contains('shuffling')) return;
-            if(slot.classList.contains('revealed') || slot.classList.contains('done')) return;
+            if(slot.classList.contains('shuffling') || slot.classList.contains('revealed')) return;
 
-            S.busy = true; S.attempts++;
-            document.getElementById('attempt-count').textContent = S.attempts;
+            document.querySelectorAll('.bowl-slot').forEach((el, idx) => {
+                if(idx !== i) el.classList.add('dimmed');
+            });
+
             slot.classList.add('lifted', 'revealed');
+            document.getElementById(`ba${i}`).classList.add('locked');
+            document.getElementById('hint-text').innerHTML = '<i class="fa-solid fa-star" style="color:var(--gold);margin-right:.3rem"></i> Pilar ditemukan!';
 
-            if(i === S.diceIdx) {
-                S.found = true;
-                document.getElementById('hint-text').innerHTML = '<i class="fa-solid fa-star" style="color:var(--gold);margin-right:.3rem"></i> Dadu ditemukan!';
-                document.getElementById(`ba${i}`).classList.add('locked');
-                setTimeout(() => {
-                    confetti();
-                    setTimeout(() => { showBriefing(pillars[i]); S.busy = false; }, 700);
-                }, 550);
-            } else {
-                toast('Tidak ada dadu di sini. Coba mangkok lain!', '#e8694a');
-                document.getElementById(`ba${i}`).classList.add('locked');
-                setTimeout(() => {
-                    slot.classList.remove('lifted');
-                    slot.classList.add('done');
-                    setTimeout(() => { slot.classList.remove('revealed'); S.busy = false; }, 650);
-                }, 1400);
+            const revealedPillarDef = currentRoundPillars[i];
+            
+            let topicIndex = availableTopics.findIndex(t => t.pillarId === Object.keys(pillarDefs).find(key => pillarDefs[key].name === revealedPillarDef.name));
+            
+            if (topicIndex === -1) {
+                availableTopics = [...allTopics]; 
+                toast('Bank soal habis! Semua topik direset ulang (16/16).', '#4ac47a');
+                topicIndex = availableTopics.findIndex(t => t.pillarId === Object.keys(pillarDefs).find(key => pillarDefs[key].name === revealedPillarDef.name));
             }
+
+            const chosenTopic = availableTopics.splice(topicIndex, 1)[0];
+            updateCounterDisplay();
+
+            setTimeout(() => {
+                confetti(revealedPillarDef.color);
+                setTimeout(() => { 
+                    showBriefing(chosenTopic, revealedPillarDef); 
+                    S.busy = false; 
+                }, 1300);
+            }, 600);
         }
 
-        /* ===== Briefing ===== */
-        function showBriefing(p) {
-            document.getElementById('r-player').innerHTML = `<i class="fa-solid fa-user" style="font-size:.75rem"></i> <strong>${playerName}</strong> mendapat materi:`;
-            document.getElementById('r-badge').innerHTML = `<i class="fa-solid ${p.icon}"></i> Pilar Berpikir Komputasional`;
-            document.getElementById('r-badge').style.cssText = `background:${p.color}15;color:${p.color};border:1px solid ${p.color}30`;
-            document.getElementById('r-title').textContent = p.name;
-            document.getElementById('r-title').style.color = p.color;
-            document.getElementById('r-desc').textContent = p.description;
-            document.getElementById('slides-outline').innerHTML = p.slides.map((s,i) => `
+        function updateCounterDisplay() {
+            document.getElementById('topic-counter').textContent = `${availableTopics.length}/16`;
+        }
+
+        function showBriefing(topic, pillarDef) {
+            document.getElementById('r-player').innerHTML = `<i class="fa-solid fa-users" style="font-size:.75rem"></i> Kelompok: <strong>${playerName}</strong>`;
+            
+            document.getElementById('r-badge').innerHTML = `<i class="fa-solid ${pillarDef.icon}"></i> ${pillarDef.name}`;
+            document.getElementById('r-badge').style.cssText = `background:${pillarDef.color}15;color:${pillarDef.color};border:1px solid ${pillarDef.color}40`;
+            
+            document.getElementById('r-title').textContent = topic.title;
+            document.getElementById('r-title').style.color = pillarDef.color;
+            
+            document.getElementById('r-subtitle').textContent = "Tema Presentasi Kelompokmu";
+            
+            // Render slides dan masukan Tips jika ada
+            document.getElementById('slides-outline').innerHTML = topic.slides.map((s, idx) => {
+                let tipHtml = '';
+                if(s.tips) {
+                    tipHtml = `<div class="slide-tip">
+                                  <i class="fa-regular fa-lightbulb"></i> 
+                                  <span><strong>Tips:</strong> ${s.tips}</span>
+                               </div>`;
+                }
+                
+                return `
                 <div class="slide-item">
-                    <div class="slide-num" style="background:${p.color}">${i+1}</div>
-                    <div class="slide-info">
-                        <div class="slide-name">${s.name}</div>
-                        <div class="slide-detail">${s.detail}</div>
+                    <div class="slide-item-header">
+                        <div class="slide-num" style="background:${pillarDef.color}">${idx+1}</div>
+                        <div class="slide-info">
+                            <div class="slide-name">${s.name}</div>
+                            <div class="slide-detail">${s.detail}</div>
+                        </div>
                     </div>
+                    ${tipHtml}
                 </div>
-            `).join('');
-            document.getElementById('result-card').style.borderTop = `3px solid ${p.color}`;
+                `;
+            }).join('');
+            
+            document.getElementById('result-card').style.borderTop = `4px solid ${pillarDef.color}`;
             document.getElementById('result-overlay').classList.add('active');
         }
 
-        function hideBriefing() { document.getElementById('result-overlay').classList.remove('active'); }
-
-        /* ===== Siswa Berikutnya ===== */
         function nextStudent() {
-            hideBriefing();
+            document.getElementById('result-overlay').classList.remove('active');
             const inp = document.getElementById('name-input');
             inp.value = '';
-            document.getElementById('name-error').textContent = '';
-            inp.style.borderColor = '';
             playerName = '';
+            
             setTimeout(() => {
                 switchTo('name-screen');
                 setTimeout(() => inp.focus(), 400);
-            }, 350);
+            }, 400);
         }
-
-        function backToName() { hideBriefing(); setTimeout(() => switchTo('name-screen'), 350); }
 
         function switchTo(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
             setTimeout(() => document.getElementById(id).classList.remove('hidden'), 80);
         }
 
-        /* ===== Toast ===== */
         function toast(msg, col) {
             const t = document.getElementById('toast');
-            t.textContent = msg; t.style.borderLeft = `3px solid ${col||'var(--gold)'}`;
-            t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2200);
+            t.textContent = msg; t.style.borderLeft = `4px solid ${col||'var(--gold)'}`;
+            t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000);
         }
 
-        /* ===== Confetti ===== */
-        function confetti() {
-            const cols = ['#e8a838','#e8694a','#4a9ee8','#4ac47a','#e8c84a','#f5efe6','#00c4cc'];
-            for(let i=0;i<55;i++){
+        function confetti(pillarColor) {
+            const cols = [pillarColor, pillarColor, '#f5efe6', '#e8a838']; 
+            for(let i=0;i<65;i++){
                 const el = document.createElement('div'); el.className = 'confetti-piece';
-                const sz = Math.random()*8+5, x = Math.random()*100;
+                const sz = Math.random()*7+5, x = Math.random()*100;
                 const c = cols[Math.floor(Math.random()*cols.length)];
-                const dur = Math.random()*2.2+1.8, del = Math.random()*.5;
-                const rot = Math.random()*1080-540, drift = (Math.random()-.5)*220;
-                const br = Math.random()>.5 ? '50%' : '2px';
-                el.style.cssText = `left:${x}%;width:${sz}px;height:${sz*.7}px;background:${c};border-radius:${br}`;
+                const dur = Math.random()*2+1.5, del = Math.random()*.4;
+                const rot = Math.random()*1080-540, drift = (Math.random()-.5)*250;
+                const br = Math.random()>.4 ? '50%' : '3px';
+                
+                el.style.cssText = `left:${x}%;width:${sz}px;height:${sz*.7}px;background:${c};border-radius:${br};box-shadow:0 0 5px ${c}80`;
                 el.animate([
-                    {transform:'translateX(0) translateY(-15px) rotate(0deg) scale(1)',opacity:1},
-                    {transform:`translateX(${drift}px) translateY(100vh) rotate(${rot}deg) scale(.4)`,opacity:0}
+                    {transform:'translateX(0) translateY(-20px) rotate(0deg) scale(1)',opacity:1},
+                    {transform:`translateX(${drift}px) translateY(100vh) rotate(${rot}deg) scale(.5)`,opacity:0}
                 ],{duration:dur*1000,delay:del*1000,easing:'cubic-bezier(.25,.46,.45,.94)',fill:'forwards'});
+                
                 document.body.appendChild(el);
                 setTimeout(() => el.remove(), (dur+del)*1000+50);
             }
